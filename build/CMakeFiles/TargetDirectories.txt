@@ -1,3 +1,0 @@
-E:/Code/Minesweeper-SDL-CMake/build/CMakeFiles/SDL2.dir
-E:/Code/Minesweeper-SDL-CMake/build/CMakeFiles/ALL_BUILD.dir
-E:/Code/Minesweeper-SDL-CMake/build/CMakeFiles/ZERO_CHECK.dir
