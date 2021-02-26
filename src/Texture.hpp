@@ -1,9 +1,4 @@
-#pragma once
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
-#include <string>
-#include <iostream>
+#include "Variables.hpp"
 class Texture
 {
 public:
@@ -20,17 +15,16 @@ public:
 	void free();
 
 	// Vi tri tao text
-	void render(int x, int y, SDL_Rect* clip = NULL);
+	void render(int x, int y, SDL_Rect *clip = NULL);
 
 	// Lay vi tri anh
 	int getWidth();
 	int getHeight();
 
 private:
-	SDL_Texture* mTexture;
+	SDL_Texture *mTexture;
 
 	// Vi tri anh
 	int mWidth;
 	int mHeight;
 };
-

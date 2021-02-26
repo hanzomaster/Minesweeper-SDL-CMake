@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include "Variables.hpp"
@@ -188,6 +187,7 @@ bool loadMedia()
 
 void createTableWithMine()
 {
+	// Cau lenh tao su ngau nhien cho tro choi
 	srand(time(0));
 	int mine = 0;
 	while (mine < numOfMine)
@@ -268,7 +268,7 @@ void flagManager()
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 }
-
+//FIXME: Sua lai phan choi lai hoan chinh
 void playAgain(bool &quitGame)
 {
 	SDL_Event e;
@@ -310,8 +310,8 @@ void close()
 	fWin = NULL;
 
 	//Dong cua so
-	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(gWindow);
+	SDL_DestroyRenderer(renderer);
 	gWindow = NULL;
 	renderer = NULL;
 

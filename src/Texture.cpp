@@ -1,19 +1,20 @@
 #include "Texture.hpp"
-#include "Variables.hpp"
-Texture::Texture() {
+Texture::Texture()
+{
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
 }
 
-Texture::~Texture() {
+Texture::~Texture()
+{
 	free();
 }
 
 bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 {
 	free();
-	SDL_Surface* textSurface = TTF_RenderText_Solid(fGameOver, textureText.c_str(), textColor);
+	SDL_Surface *textSurface = TTF_RenderText_Solid(fGameOver, textureText.c_str(), textColor);
 	if (textSurface == NULL)
 		std::cout << "Khong the tao khong gian ve! SDL_ttf Error: " << TTF_GetError() << std::endl;
 	else
@@ -38,8 +39,8 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 bool Texture::loadFromFile(std::string path)
 {
 	free();
-	SDL_Texture* newTexture = nullptr;
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	SDL_Texture *newTexture = nullptr;
+	SDL_Surface *loadedSurface = IMG_Load(path.c_str());
 	if (loadedSurface == NULL)
 		std::cout << "Khong the load anh! SDL_image error: " << IMG_GetError() << std::endl;
 	else
@@ -70,9 +71,9 @@ void Texture::free()
 	}
 }
 
-void Texture::render(int x, int y, SDL_Rect* clip)
+void Texture::render(int x, int y, SDL_Rect *clip)
 {
-	SDL_Rect rect = { x, y, mWidth, mHeight };
+	SDL_Rect rect = {x, y, mWidth, mHeight};
 
 	if (clip != NULL)
 	{
@@ -91,4 +92,3 @@ int Texture::getHeight()
 {
 	return mHeight;
 }
-

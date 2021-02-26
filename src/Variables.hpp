@@ -2,7 +2,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <iostream>
 #include <sstream>
+#include <string>
 #include <vector>
 #include <utility>
 #include "Texture.hpp"
@@ -12,17 +14,17 @@ const int TILE_SIZE = 32;
 const int BUTTON_SPRITE_TOTAL = 12;
 
 // The window we'll be rendering to
-extern SDL_Window* gWindow;
+extern SDL_Window *gWindow;
 extern int screenWidth;
 extern int screenHeight;
 
 // The window renderer
-extern SDL_Renderer* renderer;
+extern SDL_Renderer *renderer;
 
 // Globally used font
-extern TTF_Font* fGameOver;
-extern TTF_Font* fPlayAgain;
-extern TTF_Font* fWin;
+extern TTF_Font *fGameOver;
+extern TTF_Font *fPlayAgain;
+extern TTF_Font *fWin;
 
 // Mouse button texture
 extern SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -67,4 +69,3 @@ extern std::vector<std::vector<int>> board;
 
 // Board for showing
 extern std::vector<std::vector<int>> sBoard;
-
