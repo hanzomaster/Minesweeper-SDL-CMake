@@ -1,4 +1,5 @@
-#include "Variables.hpp"
+#pragma once
+#include <string>
 class Texture
 {
 public:

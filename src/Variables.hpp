@@ -1,14 +1,10 @@
 #pragma once
 #include <SDL.h>
-#include <SDL_image.h>
 #include <SDL_ttf.h>
-#include <iostream>
 #include <sstream>
-#include <string>
 #include <vector>
-#include <utility>
 #include "Texture.hpp"
-#include "Button.hpp"
+
 //Tile's constants
 const int TILE_SIZE = 32;
 const int BUTTON_SPRITE_TOTAL = 12;

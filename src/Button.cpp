@@ -1,5 +1,5 @@
 #include "Button.hpp"
-
+#include "Variables.hpp"
 void Button::reveal(int i, int j)
 {
 	if (sBoard[i][j] == COVER || sBoard[i][j] == FLAG)

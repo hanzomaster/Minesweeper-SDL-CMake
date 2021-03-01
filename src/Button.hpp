@@ -1,6 +1,7 @@
 #pragma once
-#include "Variables.hpp"
-
+#include <SDL.h>
+#include <vector>
+#include <utility>
 class Button
 {
 public:
@@ -10,11 +11,11 @@ public:
 
 	void revealSurrounding(int i, int j);
 
-	//Khoi tao vi tri 
+	//Khoi tao vi tri
 	void setPosition(int x, int y);
 
 	//Nhan phan hoi tu chuot cua nguoi dung
-	void handleEvents(SDL_Event* e);
+	void handleEvents(SDL_Event *e);
 
 	//Dua ra man hinh
 	void render(int i, int j);
@@ -23,4 +24,3 @@ private:
 	SDL_Point mPosition;
 	std::vector<std::pair<int, int>> surroundPos;
 };
-

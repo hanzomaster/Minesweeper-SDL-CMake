@@ -1,6 +1,10 @@
+#include <SDL_image.h>
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include "Variables.hpp"
+#include "Texture.hpp"
+#include "Button.hpp"
 
 std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(columnSize + 2));
 bool init();

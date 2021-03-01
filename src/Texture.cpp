@@ -1,4 +1,7 @@
+#include <SDL_image.h>
+#include <iostream>
 #include "Texture.hpp"
+#include "Variables.hpp"
 Texture::Texture()
 {
 	mTexture = NULL;
