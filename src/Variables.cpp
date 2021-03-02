@@ -1,11 +1,11 @@
 #include "Variables.hpp"
 
-//Tile's constants
-extern const int TILE_SIZE;
+//Cell's constants
+extern const int CELL_SIZE;
 extern const int BUTTON_SPRITE_TOTAL;
 
 //The window we'll be rendering to
-SDL_Window *gWindow;
+SDL_Window *window;
 int screenWidth = 500;
 int screenHeight = 500;
 
@@ -18,25 +18,21 @@ TTF_Font *fPlayAgain;
 TTF_Font *fWin;
 
 //Mouse button texture
-SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
-Texture gButtonSpriteSheetTexture;
-
-//Screen texture
-Texture gWinningTexture;
+SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
+Texture buttonSpriteSheetTexture;
 
 //Rendered texture
 Texture gGameOver;
 Texture gMineLeftTexture;
 Texture gPlayAgainTexture;
 Texture gWin;
+Texture gWinningTexture;
 
 //Gameplay variables
 int countMineLeft = numOfMine;
-int countTileLeft;
+int countCellLeft;
 bool gameOver;
 bool isWinning;
-
-//In memory text stream
 std::stringstream mineLeft;
 
 // Size of the board
@@ -47,7 +43,7 @@ int columnSize = 10;
 int numOfMine = 12;
 
 // Screen dimension
-int DISTANCE_BETWEEN = (screenWidth - rowSize * TILE_SIZE) / 2;
+int DISTANCE_BETWEEN = (screenWidth - rowSize * CELL_SIZE - 50) / 2;
 
 //Board with mine
 std::vector<std::vector<int>> board(rowSize + 2, std::vector<int>(columnSize + 2, 0));

@@ -7,7 +7,7 @@ void Button::reveal(int i, int j)
 		if (sBoard[i][j] == FLAG)
 			countMineLeft++;
 		sBoard[i][j] = board[i][j];
-		countTileLeft--;
+		countCellLeft--;
 		if (sBoard[i][j] == 0)
 		{
 			if (i < rowSize - 1 && board[i + 1][j] != MINE)
@@ -44,7 +44,12 @@ void Button::revealSurrounding(int i, int j)
 	for (int k = i - 1; k <= i + 1; ++k)
 		for (int l = j - 1; l <= j + 1; ++l)
 			if (sBoard[k][l] != FLAG)
-				sBoard[k][l] = board[k][l];
+			{
+				if (board[k][l] == 0)
+					reveal(k, l);
+				else
+					sBoard[k][l] = board[k][l];
+			}
 }
 
 void Button::setPosition(int x, int y)
@@ -61,19 +66,19 @@ void Button::handleEvents(SDL_Event *event)
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 
-		int i = (y - DISTANCE_BETWEEN) / TILE_SIZE;
-		int j = (x - DISTANCE_BETWEEN) / TILE_SIZE;
+		int i = (y - DISTANCE_BETWEEN) / CELL_SIZE;
+		int j = (x - DISTANCE_BETWEEN) / CELL_SIZE;
 
 		// Kiem tra xem co nhan vao o khong
 		bool inside = true;
 
 		if (x < mPosition.x)
 			inside = false;
-		else if (x > mPosition.x + TILE_SIZE)
+		else if (x > mPosition.x + CELL_SIZE)
 			inside = false;
 		else if (y < mPosition.y)
 			inside = false;
-		else if (y > mPosition.y + TILE_SIZE)
+		else if (y > mPosition.y + CELL_SIZE)
 			inside = false;
 		if (inside)
 			if (event->type == SDL_MOUSEBUTTONDOWN)
@@ -114,5 +119,5 @@ void Button::handleEvents(SDL_Event *event)
 void Button::render(int i, int j)
 {
 	// Tao trang thai o
-	gButtonSpriteSheetTexture.render(mPosition.x, mPosition.y, &gSpriteClips[sBoard[i][j]]);
+	buttonSpriteSheetTexture.render(mPosition.x, mPosition.y, &spriteClips[sBoard[i][j]]);
 }

@@ -5,12 +5,12 @@
 #include <vector>
 #include "Texture.hpp"
 
-//Tile's constants
-const int TILE_SIZE = 32;
+//Cell's constants
+const int CELL_SIZE = 32;
 const int BUTTON_SPRITE_TOTAL = 12;
 
 // The window we'll be rendering to
-extern SDL_Window *gWindow;
+extern SDL_Window *window;
 extern int screenWidth;
 extern int screenHeight;
 
@@ -23,8 +23,8 @@ extern TTF_Font *fPlayAgain;
 extern TTF_Font *fWin;
 
 // Mouse button texture
-extern SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
-extern Texture gButtonSpriteSheetTexture;
+extern SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
+extern Texture buttonSpriteSheetTexture;
 
 // Screen texture
 extern Texture gWinningTexture;
@@ -37,7 +37,7 @@ extern Texture gWin;
 
 // Gameplay variables
 extern int countMineLeft;
-extern int countTileLeft;
+extern int countCellLeft;
 extern bool gameOver;
 extern bool isWinning;
 

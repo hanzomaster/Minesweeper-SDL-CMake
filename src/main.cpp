@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 		bool quit = false;
 		SDL_Event event;
 
+		// FIXME: Đôi lúc số đếm mìn xung quanh bị sai
 		// Tao san choi moi
 		createTableWithMine();
 
@@ -81,15 +82,15 @@ bool init()
 		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 			std::cout << "Loc tuyen tinh khong duoc khoi dong" << std::endl;
 
-		gWindow = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
-		if (gWindow == NULL)
+		window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
+		if (window == NULL)
 		{
 			std::cout << "Khong the tao cua so game! SDL error: " << SDL_GetError() << std::endl;
 			success = false;
 		}
 		else
 		{
-			renderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
 			if (renderer == NULL)
 			{
 				std::cout << "Khong the tao but ve! SDL error: " << SDL_GetError() << std::endl;
@@ -166,7 +167,7 @@ bool loadMedia()
 	}
 
 	// Tao san min
-	if (!gButtonSpriteSheetTexture.loadFromFile("E:\\Code\\Minesweeper-SDL-CMake\\src\\Images\\Tiles.png"))
+	if (!buttonSpriteSheetTexture.loadFromFile("E:\\Code\\Minesweeper-SDL-CMake\\src\\Images\\Cells.png"))
 	{
 		std::cout << "Khong the load cac o min" << std::endl;
 		success = false;
@@ -176,22 +177,22 @@ bool loadMedia()
 		// Set sprites
 		for (int i = 0; i < BUTTON_SPRITE_TOTAL; i++)
 		{
-			gSpriteClips[i].x = i * 32;
-			gSpriteClips[i].y = 0;
-			gSpriteClips[i].w = TILE_SIZE;
-			gSpriteClips[i].h = TILE_SIZE;
+			spriteClips[i].x = i * CELL_SIZE;
+			spriteClips[i].y = 0;
+			spriteClips[i].w = CELL_SIZE;
+			spriteClips[i].h = CELL_SIZE;
 		}
 		// Tao vi tri cac o
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
-				gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_BETWEEN, i * TILE_SIZE + DISTANCE_BETWEEN);
+				gButtons[i][j].setPosition(j * CELL_SIZE + DISTANCE_BETWEEN, i * CELL_SIZE + DISTANCE_BETWEEN);
 	}
 	return success;
 }
 
 void createTableWithMine()
 {
-	// Cau lenh tao su ngau nhien cho tro choi
+	// Tao su ngau nhien cho tro choi
 	srand(time(0));
 	int mine = 0;
 	while (mine < numOfMine)
@@ -227,7 +228,7 @@ void createTableWithMine()
 bool checkWinning()
 {
 	bool win = false;
-	if (countTileLeft == numOfMine)
+	if (countCellLeft == numOfMine)
 		win = true;
 	return win;
 }
@@ -238,7 +239,8 @@ void mineManager()
 	if (!gameOver && !isWinning)
 	{
 		SDL_Color textColor = {140, 140, 140, 255};
-		mineLeft.str("");
+		mineLeft.str(std::string());
+		mineLeft.clear();
 		mineLeft << "Mine left: " << countMineLeft;
 		if (!gMineLeftTexture.loadFromRenderedText(mineLeft.str().c_str(), textColor))
 			std::cout << "Khong the tao bang dem so min con lai" << std::endl;
@@ -246,7 +248,7 @@ void mineManager()
 		gMineLeftTexture.render((screenWidth - gMineLeftTexture.getWidth()) / 2, 30);
 	}
 }
-
+// TODO: Làm màn hình thắng
 void flagManager()
 {
 	if (isWinning && !gameOver)
@@ -275,24 +277,24 @@ void flagManager()
 //FIXME: Sua lai phan choi lai hoan chinh
 void playAgain(bool &quitGame)
 {
-	SDL_Event e;
+	SDL_Event event;
 
 	//Handle events on queue
-	while (SDL_PollEvent(&e) != 0)
+	while (SDL_PollEvent(&event) != 0)
 	{
 		//User requests play again
-		if (e.key.keysym.sym == SDLK_s)
+		if (event.key.keysym.sym == SDLK_s)
 		{
 			//Recreate constants
 			countMineLeft = numOfMine;
-			countTileLeft = rowSize * columnSize;
+			countCellLeft = rowSize * columnSize;
 
 			//Recreate flag
 			gameOver = false;
 			isWinning = false;
 			quitGame = false;
 		}
-		else if (e.key.keysym.sym == SDLK_ESCAPE)
+		else if (event.key.keysym.sym == SDLK_ESCAPE)
 			quitGame = true;
 	}
 }
@@ -300,7 +302,7 @@ void playAgain(bool &quitGame)
 void close()
 {
 	//Dong cac hinh anh
-	gButtonSpriteSheetTexture.free();
+	buttonSpriteSheetTexture.free();
 	gMineLeftTexture.free();
 	gWinningTexture.free();
 	gGameOver.free();
@@ -314,9 +316,9 @@ void close()
 	fWin = NULL;
 
 	//Dong cua so
-	SDL_DestroyWindow(gWindow);
+	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
-	gWindow = NULL;
+	window = NULL;
 	renderer = NULL;
 
 	//Thoat SDL
