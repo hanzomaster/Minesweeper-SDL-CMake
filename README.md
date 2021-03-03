@@ -19,4 +19,6 @@ Trước khi download file zip về cần có [Visual Studio Build Tool 2019](ht
 - Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu bom và chuột giữa để khám phá các ô xung quanh khi phát hiện bom
 - Khi bạn thắng hoặc thua, hãy nhấn nút 's' trên bàn phím để chơi lại hoặc nút 'esc' để thoát
 
+### Lưu ý: Trong lúc chơi nếu di chuột nhanh quang vùng xám có thể làm tắt game :))
+
 #### tags: `SDL2` `C++` `Minesweeper`

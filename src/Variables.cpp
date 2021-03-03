@@ -31,8 +31,8 @@ Texture gWinningTexture;
 //Gameplay variables
 int countMineLeft = numOfMine;
 int countCellLeft;
-bool gameOver;
-bool isWinning;
+bool gameOver = false;
+bool isWinning = false;
 std::stringstream mineLeft;
 
 // Size of the board

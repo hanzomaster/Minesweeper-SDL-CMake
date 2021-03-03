@@ -65,13 +65,10 @@ bool Texture::loadFromFile(std::string path)
 
 void Texture::free()
 {
-	if (mTexture == NULL)
-	{
-		SDL_DestroyTexture(mTexture);
-		mTexture = NULL;
-		mWidth = 0;
-		mHeight = 0;
-	}
+	SDL_DestroyTexture(mTexture);
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
 }
 
 void Texture::render(int x, int y, SDL_Rect *clip)

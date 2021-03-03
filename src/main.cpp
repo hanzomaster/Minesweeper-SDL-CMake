@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 		bool quit = false;
 		SDL_Event event;
 
-		// FIXME: Đôi lúc số đếm mìn xung quanh bị sai
 		// Tao san choi moi
 		createTableWithMine();
 
@@ -248,14 +247,15 @@ void mineManager()
 		gMineLeftTexture.render((screenWidth - gMineLeftTexture.getWidth()) / 2, 30);
 	}
 }
-// TODO: Làm màn hình thắng
+
+// TODO: Làm màn hình thắng và thua
 void flagManager()
 {
 	if (isWinning && !gameOver)
 	{
 
 		// Tao man hinh thang
-		gWinningTexture.render(0, 0);
+		gWinningTexture.render((screenWidth - gWinningTexture.getWidth()) / 2, 30);
 
 		// Tao text choi lai
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
@@ -267,6 +267,10 @@ void flagManager()
 			for (int j = 1; j <= columnSize; j++)
 				sBoard[i][j] = board[i][j];
 
+		for (int i = 1; i <= rowSize; i++)
+			for (int j = 1; j <= columnSize; j++)
+				gButtons[i][j].render(i, j);
+
 		// Cap nhat man hinh
 		gGameOver.render((screenWidth - gGameOver.getWidth()) / 2, 30);
 
@@ -274,27 +278,32 @@ void flagManager()
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 }
-//FIXME: Sua lai phan choi lai hoan chinh
+
 void playAgain(bool &quitGame)
 {
 	SDL_Event event;
 
-	//Handle events on queue
 	while (SDL_PollEvent(&event) != 0)
 	{
-		//User requests play again
+		// Nếu người dùng nhấn 's' để chơi lại
 		if (event.key.keysym.sym == SDLK_s)
 		{
-			//Recreate constants
 			countMineLeft = numOfMine;
 			countCellLeft = rowSize * columnSize;
 
-			//Recreate flag
 			gameOver = false;
 			isWinning = false;
 			quitGame = false;
+
+			for (int i = 0; i < rowSize + 2; ++i)
+				fill(board[i].begin(), board[i].end(), 0);
+
+			for (int i = 1; i <= rowSize; ++i)
+				for (int j = 0; j <= columnSize; ++j)
+					sBoard[i][j] = COVER;
+			createTableWithMine();
 		}
-		else if (event.key.keysym.sym == SDLK_ESCAPE)
+		else if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
 			quitGame = true;
 	}
 }
