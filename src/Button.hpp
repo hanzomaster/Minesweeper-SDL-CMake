@@ -11,13 +11,13 @@ public:
 
 	void revealSurrounding(int i, int j);
 
-	//Khoi tao vi tri
+	// Khởi tạo vị trí
 	void setPosition(int x, int y);
 
-	//Nhan phan hoi tu chuot cua nguoi dung
+	// Nhận phản hồi từ chuột
 	void handleEvents(SDL_Event *e);
 
-	//Dua ra man hinh
+	// Đưa ra màn hình
 	void render(int i, int j);
 
 private:

@@ -7,25 +7,25 @@ public:
 
 	~Texture();
 
-	// Tao anh tu font
+	// Tạo ảnh từ font
 	bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
 
-	// Tai anh tu duong dan
+	// Tải ảnh từ đường dẫn
 	bool loadFromFile(std::string path);
 
 	void free();
 
-	// Vi tri tao text
+	// Tạo text tại vị trí bất kì
 	void render(int x, int y, SDL_Rect *clip = NULL);
 
-	// Lay vi tri anh
+	// Lấy vị trí ảnh
 	int getWidth();
 	int getHeight();
 
 private:
 	SDL_Texture *mTexture;
 
-	// Vi tri anh
+	// Vị trí ảnh
 	int mWidth;
 	int mHeight;
 };

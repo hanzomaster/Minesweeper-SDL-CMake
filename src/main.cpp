@@ -26,10 +26,9 @@ int main(int argc, char *argv[])
 		bool quit = false;
 		SDL_Event event;
 
-		// Tao san choi moi
 		createTableWithMine();
 
-		// Vong lap xu li thao tac nguoi dung
+		// Vòng lặp của game
 		while (!quit)
 		{
 			while (!gameOver && !quit && !isWinning)
@@ -46,11 +45,11 @@ int main(int argc, char *argv[])
 					isWinning = checkWinning();
 				}
 
-				// Tao background
+				// Tạo background
 				SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
 				SDL_RenderClear(renderer);
 
-				// Ve ban min
+				// Vẽ sân mìn
 				for (int i = 1; i <= rowSize; i++)
 					for (int j = 1; j <= columnSize; j++)
 						gButtons[i][j].render(i, j);
@@ -116,7 +115,7 @@ bool init()
 bool loadMedia()
 {
 	bool success = true;
-	// Tao cac font chu se viet cho game
+	// Tạo các câu sẽ hiện lên màn hình
 	fGameOver = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
 	if (fGameOver == NULL)
 	{
@@ -173,7 +172,7 @@ bool loadMedia()
 	}
 	else
 	{
-		// Set sprites
+		// Cắt các ô từ hình ảnh
 		for (int i = 0; i < BUTTON_SPRITE_TOTAL; i++)
 		{
 			spriteClips[i].x = i * CELL_SIZE;
@@ -181,7 +180,7 @@ bool loadMedia()
 			spriteClips[i].w = CELL_SIZE;
 			spriteClips[i].h = CELL_SIZE;
 		}
-		// Tao vi tri cac o
+		// Tạo vị trí các ô
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
 				gButtons[i][j].setPosition(j * CELL_SIZE + DISTANCE_BETWEEN, i * CELL_SIZE + DISTANCE_BETWEEN);
@@ -189,9 +188,11 @@ bool loadMedia()
 	return success;
 }
 
+// FIXME: Đôi lúc các số đếm mìn xung quanh bị sai không đếm đúng số mìn
+// NOTE: Có thể là do kích cỡ của sân chơi ?
 void createTableWithMine()
 {
-	// Tao su ngau nhien cho tro choi
+	// Tạo sự ngẫu nhiên cho game
 	srand(time(0));
 	int mine = 0;
 	while (mine < numOfMine)
@@ -227,14 +228,19 @@ void createTableWithMine()
 bool checkWinning()
 {
 	bool win = false;
-	if (countCellLeft == numOfMine)
-		win = true;
+	for (int i = 1; i <= rowSize; ++i)
+		for (int j = 1; j <= columnSize; ++j)
+			if (board[i][j] == MINE)
+				if (sBoard[i][j] == FLAG)
+					win = true;
+				else
+					return false;
 	return win;
 }
 
 void mineManager()
 {
-	// Tao bang dem so min con lai
+	// Tạo bảng đếm số mìn còn lại
 	if (!gameOver && !isWinning)
 	{
 		SDL_Color textColor = {140, 140, 140, 255};
@@ -251,13 +257,21 @@ void mineManager()
 // TODO: Làm màn hình thắng và thua
 void flagManager()
 {
-	if (isWinning && !gameOver)
+	if (isWinning)
 	{
+		// In ra vi tri min
+		for (int i = 1; i <= rowSize; i++)
+			for (int j = 1; j <= columnSize; j++)
+				if (sBoard[i][j] != FLAG)
+					sBoard[i][j] = board[i][j];
+		for (int i = 1; i <= rowSize; i++)
+			for (int j = 1; j <= columnSize; j++)
+				gButtons[i][j].render(i, j);
 
-		// Tao man hinh thang
-		gWinningTexture.render((screenWidth - gWinningTexture.getWidth()) / 2, 30);
+		// Tạo màn hình thắng
+		gWin.render((screenWidth - gWin.getWidth()) / 2, 30);
 
-		// Tao text choi lai
+		// Tạo text chơi lại
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 	if (gameOver)
@@ -266,15 +280,14 @@ void flagManager()
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
 				sBoard[i][j] = board[i][j];
-
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
 				gButtons[i][j].render(i, j);
 
-		// Cap nhat man hinh
+		// Tạo màn hình thua
 		gGameOver.render((screenWidth - gGameOver.getWidth()) / 2, 30);
 
-		// Tao text choi lai
+		// Tạo text chơi lại
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 }
@@ -282,22 +295,19 @@ void flagManager()
 void playAgain(bool &quitGame)
 {
 	SDL_Event event;
-
 	while (SDL_PollEvent(&event) != 0)
 	{
 		// Nếu người dùng nhấn 's' để chơi lại
 		if (event.key.keysym.sym == SDLK_s)
 		{
 			countMineLeft = numOfMine;
-			countCellLeft = rowSize * columnSize;
-
 			gameOver = false;
 			isWinning = false;
 			quitGame = false;
 
+			// Tạo lại sân mìn
 			for (int i = 0; i < rowSize + 2; ++i)
 				fill(board[i].begin(), board[i].end(), 0);
-
 			for (int i = 1; i <= rowSize; ++i)
 				for (int j = 0; j <= columnSize; ++j)
 					sBoard[i][j] = COVER;
@@ -310,27 +320,24 @@ void playAgain(bool &quitGame)
 
 void close()
 {
-	//Dong cac hinh anh
+	// Đóng các texture
 	buttonSpriteSheetTexture.free();
 	gMineLeftTexture.free();
-	gWinningTexture.free();
+	gWin.free();
 	gGameOver.free();
 
-	//Dong font
+	// Đóng các font
 	TTF_CloseFont(fGameOver);
 	TTF_CloseFont(fPlayAgain);
 	TTF_CloseFont(fWin);
-	fGameOver = NULL;
-	fPlayAgain = NULL;
-	fWin = NULL;
 
-	//Dong cua so
+	// Đóng cửa sổ và renderer
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	window = NULL;
 	renderer = NULL;
 
-	//Thoat SDL
+	// Thoát SDL
 	IMG_Quit();
 	SDL_Quit();
 }

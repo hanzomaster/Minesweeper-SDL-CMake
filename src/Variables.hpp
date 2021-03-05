@@ -5,11 +5,11 @@
 #include <vector>
 #include "Texture.hpp"
 
-//Cell's constants
+// Kích cỡ một ô mìn
 const int CELL_SIZE = 32;
 const int BUTTON_SPRITE_TOTAL = 12;
 
-// The window we'll be rendering to
+// Biến window và kích cỡ
 extern SDL_Window *window;
 extern int screenWidth;
 extern int screenHeight;
@@ -17,7 +17,7 @@ extern int screenHeight;
 // The window renderer
 extern SDL_Renderer *renderer;
 
-// Globally used font
+// Các font chữ trong game
 extern TTF_Font *fGameOver;
 extern TTF_Font *fPlayAgain;
 extern TTF_Font *fWin;
@@ -26,30 +26,25 @@ extern TTF_Font *fWin;
 extern SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
 extern Texture buttonSpriteSheetTexture;
 
-// Screen texture
-extern Texture gWinningTexture;
-
-// Rendered texture
+// Biến in ra chữ trong game
 extern Texture gGameOver;
 extern Texture gMineLeftTexture;
 extern Texture gPlayAgainTexture;
 extern Texture gWin;
 
-// Gameplay variables
-extern int countMineLeft;
-extern int countCellLeft;
-extern bool gameOver;
-extern bool isWinning;
+// Tổng số mìn
+extern int numOfMine;
 
-// In memory text stream
-extern std::stringstream mineLeft;
-
-// Size of the board
+// Kích cỡ sân mìn
 extern int rowSize;
 extern int columnSize;
 
-// Number of mine
-extern int numOfMine;
+// Biến trò chơi
+extern int countMineLeft;
+extern bool gameOver;
+extern bool isWinning;
+extern std::stringstream mineLeft;
+
 enum title
 {
 	MINE = 9,
@@ -57,11 +52,11 @@ enum title
 	FLAG
 };
 
-// Screen dimension
+// Vị trí sân mìn
 extern int DISTANCE_BETWEEN;
 
-// Board with mine
+// Sân mìn mẫu
 extern std::vector<std::vector<int>> board;
 
-// Board for showing
+// Sân mìn người chơi sẽ tương tác
 extern std::vector<std::vector<int>> sBoard;

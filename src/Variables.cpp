@@ -1,52 +1,50 @@
 #include "Variables.hpp"
 
-//Cell's constants
+// Kích cỡ một ô mìn
 extern const int CELL_SIZE;
 extern const int BUTTON_SPRITE_TOTAL;
 
-//The window we'll be rendering to
+// Biến window và kích cỡ
 SDL_Window *window;
-int screenWidth = 500;
-int screenHeight = 500;
+int screenWidth = rowSize * 50;
+int screenHeight = columnSize * 50;
 
-//The window renderer
+// The window renderer
 SDL_Renderer *renderer;
 
-//Globally used font
+// Các font chữ trong game
 TTF_Font *fGameOver;
 TTF_Font *fPlayAgain;
 TTF_Font *fWin;
 
-//Mouse button texture
+// Mouse button texture
 SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
 Texture buttonSpriteSheetTexture;
 
-//Rendered texture
+// Biến in ra chữ trong game
 Texture gGameOver;
 Texture gMineLeftTexture;
 Texture gPlayAgainTexture;
 Texture gWin;
-Texture gWinningTexture;
 
-//Gameplay variables
+// Tổng số mìn
+int numOfMine = 12;
+
+// Kích cỡ sân mìn
+int rowSize = 10;
+int columnSize = 10;
+
+// Biến trò chơi
 int countMineLeft = numOfMine;
-int countCellLeft;
 bool gameOver = false;
 bool isWinning = false;
 std::stringstream mineLeft;
 
-// Size of the board
-int rowSize = 10;
-int columnSize = 10;
-
-//Number of mine
-int numOfMine = 12;
-
-// Screen dimension
+// Vị trí sân mìn
 int DISTANCE_BETWEEN = (screenWidth - rowSize * CELL_SIZE - 50) / 2;
 
-//Board with mine
+// Sân mìn mẫu
 std::vector<std::vector<int>> board(rowSize + 2, std::vector<int>(columnSize + 2, 0));
 
-//Board for showing
+// Sân mìn người chơi sẽ tương tác
 std::vector<std::vector<int>> sBoard(rowSize + 2, std::vector<int>(columnSize + 2, COVER));

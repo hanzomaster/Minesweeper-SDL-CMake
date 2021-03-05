@@ -31,11 +31,10 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 			mHeight = textSurface->h;
 		}
 
-		// Xoa hinh anh cu
+		// Xoá surface đã được đưa vào texture
 		SDL_FreeSurface(textSurface);
 	}
 
-	// Tra ve thanh cong
 	return mTexture != NULL;
 }
 
