@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 		{
 			while (!gameOver && !quit && !isWinning)
 			{
-				// Xu li cac thao tac
+				// Xử lí các thao tác
 				while (SDL_PollEvent(&event) != 0)
 				{
 					if (event.type == SDL_QUIT || event.key.keysym.sym == SDLK_ESCAPE)
@@ -115,7 +115,7 @@ bool init()
 bool loadMedia()
 {
 	bool success = true;
-	// Tạo các câu sẽ hiện lên màn hình
+	// Tạo các dòng chữ sẽ hiện lên màn hình
 	fGameOver = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
 	if (fGameOver == NULL)
 	{
@@ -164,7 +164,7 @@ bool loadMedia()
 		}
 	}
 
-	// Tao san min
+	// Tạo sân mìn
 	if (!buttonSpriteSheetTexture.loadFromFile("E:\\Code\\Minesweeper-SDL-CMake\\src\\Images\\Cells.png"))
 	{
 		std::cout << "Khong the load cac o min" << std::endl;
@@ -188,8 +188,6 @@ bool loadMedia()
 	return success;
 }
 
-// FIXME: Đôi lúc các số đếm mìn xung quanh bị sai không đếm đúng số mìn
-// NOTE: Có thể là do kích cỡ của sân chơi ?
 void createTableWithMine()
 {
 	// Tạo sự ngẫu nhiên cho game
@@ -197,29 +195,29 @@ void createTableWithMine()
 	int mine = 0;
 	while (mine < numOfMine)
 	{
-		int i = rand() % rowSize + 1;
-		int j = rand() % columnSize + 1;
+		int i = (rand() % rowSize) + 1;
+		int j = (rand() % columnSize) + 1;
 		if (board[i][j] == MINE)
 			continue;
 		else
 		{
 			board[i][j] = MINE;
 			mine++;
-			if (board[i - 1][j] != MINE && i > 0)
+			if (board[i - 1][j] != MINE)
 				board[i - 1][j]++;
-			if (board[i][j - 1] != MINE && j > 0)
+			if (board[i][j - 1] != MINE)
 				board[i][j - 1]++;
-			if (board[i + 1][j] != MINE && i < rowSize - 1)
+			if (board[i + 1][j] != MINE)
 				board[i + 1][j]++;
-			if (board[i][j + 1] != MINE && j < columnSize - 1)
+			if (board[i][j + 1] != MINE)
 				board[i][j + 1]++;
-			if (board[i - 1][j - 1] != MINE && i > 0 && j > 0)
+			if (board[i - 1][j - 1] != MINE)
 				board[i - 1][j - 1]++;
-			if (board[i - 1][j + 1] != MINE && i > 0 && j < columnSize - 1)
+			if (board[i - 1][j + 1] != MINE)
 				board[i - 1][j + 1]++;
-			if (board[i + 1][j - 1] != MINE && j > 0 && i < rowSize - 1)
+			if (board[i + 1][j - 1] != MINE)
 				board[i + 1][j - 1]++;
-			if (board[i + 1][j + 1] != MINE && i < rowSize - 1 && j < columnSize - 1)
+			if (board[i + 1][j + 1] != MINE)
 				board[i + 1][j + 1]++;
 		}
 	}
@@ -259,7 +257,7 @@ void flagManager()
 {
 	if (isWinning)
 	{
-		// In ra vi tri min
+		// In ra vị trí mìn
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
 				if (sBoard[i][j] != FLAG)
@@ -276,7 +274,7 @@ void flagManager()
 	}
 	if (gameOver)
 	{
-		// In ra vi tri min
+		// In ra vị trí mìn
 		for (int i = 1; i <= rowSize; i++)
 			for (int j = 1; j <= columnSize; j++)
 				sBoard[i][j] = board[i][j];
