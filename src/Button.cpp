@@ -54,7 +54,7 @@ void Button::setPosition(int x, int y)
 
 void Button::handleEvents(SDL_Event *event)
 {
-	if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP)
+	if (event->type == SDL_MOUSEBUTTONDOWN)
 	{
 		// Lấy vị trí con trỏ
 		int x, y;
@@ -75,38 +75,37 @@ void Button::handleEvents(SDL_Event *event)
 		else if (y > mPosition.y + CELL_SIZE)
 			inside = false;
 		if (inside)
-			if (event->type == SDL_MOUSEBUTTONDOWN)
-				switch (event->button.button)
+			switch (event->button.button)
+			{
+			case SDL_BUTTON_LEFT:
+			{
+				reveal(i, j);
+				if (board[i][j] == MINE)
+					gameOver = true;
+				break;
+			}
+			case SDL_BUTTON_RIGHT:
+			{
+				if (sBoard[i][j] == COVER)
 				{
-				case SDL_BUTTON_LEFT:
+					if (countMineLeft == 0)
+						break;
+					sBoard[i][j] = FLAG;
+					countMineLeft--;
+				}
+				else if (sBoard[i][j] == FLAG)
 				{
-					reveal(i, j);
-					if (board[i][j] == MINE)
-						gameOver = true;
-					break;
+					sBoard[i][j] = COVER;
+					countMineLeft++;
 				}
-				case SDL_BUTTON_RIGHT:
-				{
-					if (sBoard[i][j] == COVER)
-					{
-						if (countMineLeft == 0)
-							break;
-						sBoard[i][j] = FLAG;
-						countMineLeft--;
-					}
-					else if (sBoard[i][j] == FLAG)
-					{
-						sBoard[i][j] = COVER;
-						countMineLeft++;
-					}
-				}
-				case SDL_BUTTON_MIDDLE:
-				{
-					if (sBoard[i][j] < MINE && correctFlag(i, j))
-						revealSurrounding(i, j);
-					break;
-				}
-				}
+			}
+			case SDL_BUTTON_MIDDLE:
+			{
+				if (sBoard[i][j] < MINE && correctFlag(i, j))
+					revealSurrounding(i, j);
+				break;
+			}
+			}
 	}
 }
 

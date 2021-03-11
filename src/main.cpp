@@ -17,6 +17,7 @@ void playAgain(bool &quitGame);
 void close();
 int main(int argc, char *argv[])
 {
+	// TODO: Làm menu cho game
 	if (!init())
 		std::cout << "Khoi tao chuong trinh that bai..." << std::endl;
 	else if (!loadMedia())
@@ -36,11 +37,12 @@ int main(int argc, char *argv[])
 				// Xử lí các thao tác
 				while (SDL_PollEvent(&event) != 0)
 				{
-					if (event.type == SDL_QUIT || event.key.keysym.sym == SDLK_ESCAPE)
+					if (event.type == SDL_QUIT)
 						quit = true;
-
-					for (int i = 1; i <= rowSize; i++)
-						for (int j = 1; j <= columnSize; j++)
+					else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+						quit = true;
+					for (int i = 1; i <= rowSize; ++i)
+						for (int j = 1; j <= columnSize; ++j)
 							gButtons[i][j].handleEvents(&event);
 					isWinning = checkWinning();
 				}
@@ -50,8 +52,8 @@ int main(int argc, char *argv[])
 				SDL_RenderClear(renderer);
 
 				// Vẽ sân mìn
-				for (int i = 1; i <= rowSize; i++)
-					for (int j = 1; j <= columnSize; j++)
+				for (int i = 1; i <= rowSize; ++i)
+					for (int j = 1; j <= columnSize; ++j)
 						gButtons[i][j].render(i, j);
 
 				mineManager();
@@ -115,7 +117,7 @@ bool init()
 bool loadMedia()
 {
 	bool success = true;
-	// Tạo các dòng chữ sẽ hiện lên màn hình
+	// Tạo các font chữ sẽ hiện lên màn hình
 	fGameOver = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
 	if (fGameOver == NULL)
 	{
@@ -172,8 +174,8 @@ bool loadMedia()
 	}
 	else
 	{
-		// Cắt các ô từ hình ảnh
-		for (int i = 0; i < BUTTON_SPRITE_TOTAL; i++)
+		// Cắt các ô từ hình ảnh Cells.png
+		for (int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
 		{
 			spriteClips[i].x = i * CELL_SIZE;
 			spriteClips[i].y = 0;
@@ -181,8 +183,8 @@ bool loadMedia()
 			spriteClips[i].h = CELL_SIZE;
 		}
 		// Tạo vị trí các ô
-		for (int i = 1; i <= rowSize; i++)
-			for (int j = 1; j <= columnSize; j++)
+		for (int i = 1; i <= rowSize; ++i)
+			for (int j = 1; j <= columnSize; ++j)
 				gButtons[i][j].setPosition(j * CELL_SIZE + DISTANCE_BETWEEN, i * CELL_SIZE + DISTANCE_BETWEEN);
 	}
 	return success;
@@ -190,7 +192,7 @@ bool loadMedia()
 
 void createTableWithMine()
 {
-	// Tạo sự ngẫu nhiên cho game
+	// Tạo sự ngẫu nhiên cho game qua mỗi lần chơi
 	srand(time(0));
 	int mine = 0;
 	while (mine < numOfMine)
@@ -252,40 +254,38 @@ void mineManager()
 	}
 }
 
-// TODO: Làm màn hình thắng và thua
 void flagManager()
 {
 	if (isWinning)
 	{
 		// In ra vị trí mìn
-		for (int i = 1; i <= rowSize; i++)
-			for (int j = 1; j <= columnSize; j++)
+		for (int i = 1; i <= rowSize; ++i)
+			for (int j = 1; j <= columnSize; ++j)
 				if (sBoard[i][j] != FLAG)
 					sBoard[i][j] = board[i][j];
-		for (int i = 1; i <= rowSize; i++)
-			for (int j = 1; j <= columnSize; j++)
+		for (int i = 1; i <= rowSize; ++i)
+			for (int j = 1; j <= columnSize; ++j)
 				gButtons[i][j].render(i, j);
 
 		// Tạo màn hình thắng
 		gWin.render((screenWidth - gWin.getWidth()) / 2, 30);
 
-		// Tạo text chơi lại
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 	if (gameOver)
 	{
 		// In ra vị trí mìn
-		for (int i = 1; i <= rowSize; i++)
-			for (int j = 1; j <= columnSize; j++)
-				sBoard[i][j] = board[i][j];
-		for (int i = 1; i <= rowSize; i++)
-			for (int j = 1; j <= columnSize; j++)
+		for (int i = 1; i <= rowSize; ++i)
+			for (int j = 1; j <= columnSize; ++j)
+				if (board[i][j] == MINE)
+					sBoard[i][j] = board[i][j];
+		for (int i = 1; i <= rowSize; ++i)
+			for (int j = 1; j <= columnSize; ++j)
 				gButtons[i][j].render(i, j);
 
 		// Tạo màn hình thua
 		gGameOver.render((screenWidth - gGameOver.getWidth()) / 2, 30);
 
-		// Tạo text chơi lại
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 	}
 }
@@ -296,7 +296,9 @@ void playAgain(bool &quitGame)
 	while (SDL_PollEvent(&event) != 0)
 	{
 		// Nếu người dùng nhấn 's' để chơi lại
-		if (event.key.keysym.sym == SDLK_s)
+		if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
+			quitGame = true;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
 		{
 			countMineLeft = numOfMine;
 			gameOver = false;
@@ -311,8 +313,6 @@ void playAgain(bool &quitGame)
 					sBoard[i][j] = COVER;
 			createTableWithMine();
 		}
-		else if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
-			quitGame = true;
 	}
 }
 

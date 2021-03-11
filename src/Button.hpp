@@ -22,5 +22,4 @@ public:
 
 private:
 	SDL_Point mPosition;
-	std::vector<std::pair<int, int>> surroundPos;
 };

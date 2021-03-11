@@ -6,8 +6,8 @@ extern const int BUTTON_SPRITE_TOTAL;
 
 // Biến window và kích cỡ
 SDL_Window *window;
-int screenWidth = rowSize * 50;
-int screenHeight = columnSize * 50;
+int screenWidth = 500;
+int screenHeight = 500;
 
 // The window renderer
 SDL_Renderer *renderer;
@@ -28,11 +28,11 @@ Texture gPlayAgainTexture;
 Texture gWin;
 
 // Tổng số mìn
-int numOfMine = 12;
+int numOfMine = 10;
 
 // Kích cỡ sân mìn
-int rowSize = 10;
-int columnSize = 10;
+int rowSize = 9;
+int columnSize = 9;
 
 // Biến trò chơi
 int countMineLeft = numOfMine;
