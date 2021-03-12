@@ -8,6 +8,7 @@
 
 std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(columnSize + 2));
 bool init();
+std::string getSourcesPath();
 bool loadMedia();
 void createTableWithMine();
 bool checkWinning();
@@ -114,11 +115,31 @@ bool init()
 	return success;
 }
 
+std::string getSourcesPath()
+{
+	std::string baseRes;
+	char *basePath = SDL_GetBasePath();
+	if (basePath)
+	{
+		baseRes = basePath;
+		SDL_free(basePath);
+	}
+	int pos = baseRes.find("build");
+	baseRes = baseRes.substr(0, pos) + "src/";
+	for (int i = 0; i < baseRes.length(); ++i)
+		if (baseRes[i] == '\\')
+			baseRes[i] = '/';
+	return baseRes;
+}
+
 bool loadMedia()
 {
 	bool success = true;
+	std::string resPath = getSourcesPath();
+	std::string fontPath = resPath + std::string("Font/visitor1.ttf");
+	std::string imgPath = resPath + std::string("Images/Cells.png");
 	// Tạo các font chữ sẽ hiện lên màn hình
-	fGameOver = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
+	fGameOver = TTF_OpenFont(fontPath.c_str(), 40);
 	if (fGameOver == NULL)
 	{
 		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
@@ -134,7 +155,7 @@ bool loadMedia()
 		}
 	}
 
-	fWin = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
+	fWin = TTF_OpenFont(fontPath.c_str(), 40);
 	if (fWin == NULL)
 	{
 		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
@@ -150,7 +171,7 @@ bool loadMedia()
 		}
 	}
 
-	fPlayAgain = TTF_OpenFont("E:\\Code\\Minesweeper-SDL-CMake\\src\\Font\\visitor1.ttf", 40);
+	fPlayAgain = TTF_OpenFont(fontPath.c_str(), 40);
 	if (fPlayAgain == NULL)
 	{
 		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
@@ -167,7 +188,7 @@ bool loadMedia()
 	}
 
 	// Tạo sân mìn
-	if (!buttonSpriteSheetTexture.loadFromFile("E:\\Code\\Minesweeper-SDL-CMake\\src\\Images\\Cells.png"))
+	if (!buttonSpriteSheetTexture.loadFromFile(imgPath.c_str()))
 	{
 		std::cout << "Khong the load cac o min" << std::endl;
 		success = false;
@@ -332,8 +353,8 @@ void close()
 	// Đóng cửa sổ và renderer
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
-	window = NULL;
-	renderer = NULL;
+	window = nullptr;
+	renderer = nullptr;
 
 	// Thoát SDL
 	IMG_Quit();
