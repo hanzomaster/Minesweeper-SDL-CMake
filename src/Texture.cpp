@@ -17,7 +17,7 @@ Texture::~Texture()
 bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 {
 	free();
-	SDL_Surface *textSurface = TTF_RenderText_Solid(fGameOver, textureText.c_str(), textColor);
+	SDL_Surface *textSurface = TTF_RenderText_Solid(fGame, textureText.c_str(), textColor);
 	if (textSurface == NULL)
 		std::cout << "Khong the tao khong gian ve! SDL_ttf Error: " << TTF_GetError() << std::endl;
 	else
@@ -34,21 +34,19 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 		// Xoá surface đã được đưa vào texture
 		SDL_FreeSurface(textSurface);
 	}
-
 	return mTexture != NULL;
 }
 
 bool Texture::loadFromFile(std::string path)
 {
 	free();
-	SDL_Texture *newTexture = nullptr;
 	SDL_Surface *loadedSurface = IMG_Load(path.c_str());
 	if (loadedSurface == NULL)
 		std::cout << "Khong the load anh! SDL_image error: " << IMG_GetError() << std::endl;
 	else
 	{
-		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-		if (newTexture == NULL)
+		mTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if (mTexture == NULL)
 			std::cout << "Khong ve duoc anh tai " << path << "! SDL error: " << SDL_GetError() << std::endl;
 		else
 		{
@@ -57,8 +55,6 @@ bool Texture::loadFromFile(std::string path)
 		}
 		SDL_FreeSurface(loadedSurface);
 	}
-
-	mTexture = newTexture;
 	return mTexture != NULL;
 }
 
@@ -72,7 +68,7 @@ void Texture::free()
 
 void Texture::render(int x, int y, SDL_Rect *clip)
 {
-	SDL_Rect rect = {x, y, mWidth, mHeight};
+	rect = {x, y, mWidth, mHeight};
 
 	if (clip != NULL)
 	{
@@ -90,4 +86,14 @@ int Texture::getWidth()
 int Texture::getHeight()
 {
 	return mHeight;
+}
+
+SDL_Rect Texture::getRect() const
+{
+	return rect;
+}
+
+SDL_Texture *Texture::getTexture()
+{
+	return mTexture;
 }

@@ -1,10 +1,12 @@
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include "Variables.hpp"
 #include "Texture.hpp"
 #include "Button.hpp"
+#include "StartScreen.hpp"
 
 std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(columnSize + 2));
 bool init();
@@ -25,45 +27,46 @@ int main(int argc, char *argv[])
 		std::cout << "Khoi tao phong chu that bai..." << std::endl;
 	else
 	{
-		bool quit = false;
-		SDL_Event event;
-
-		createTableWithMine();
-
-		// Vòng lặp của game
-		while (!quit)
+		int menuOption = showMenu();
+		if (menuOption == 0)
 		{
-			while (!gameOver && !quit && !isWinning)
+			bool quit = false;
+			SDL_Event event;
+			createTableWithMine();
+			// Vòng lặp của game
+			while (!quit)
 			{
-				// Xử lí các thao tác
-				while (SDL_PollEvent(&event) != 0)
+				while (!gameOver && !quit && !isWinning)
 				{
-					if (event.type == SDL_QUIT)
-						quit = true;
-					else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-						quit = true;
+					// Xử lí các thao tác
+					while (SDL_PollEvent(&event) != 0)
+					{
+						if (event.type == SDL_QUIT)
+							quit = true;
+						else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+							quit = true;
+						for (int i = 1; i <= rowSize; ++i)
+							for (int j = 1; j <= columnSize; ++j)
+								gButtons[i][j].handleEvents(&event);
+						isWinning = checkWinning();
+					}
+
+					// Tạo background
+					SDL_RenderClear(renderer);
+
+					// Vẽ sân mìn
 					for (int i = 1; i <= rowSize; ++i)
 						for (int j = 1; j <= columnSize; ++j)
-							gButtons[i][j].handleEvents(&event);
-					isWinning = checkWinning();
+							gButtons[i][j].render(i, j);
+
+					mineManager();
+
+					flagManager();
+
+					SDL_RenderPresent(renderer);
 				}
-
-				// Tạo background
-				SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
-				SDL_RenderClear(renderer);
-
-				// Vẽ sân mìn
-				for (int i = 1; i <= rowSize; ++i)
-					for (int j = 1; j <= columnSize; ++j)
-						gButtons[i][j].render(i, j);
-
-				mineManager();
-
-				flagManager();
-
-				SDL_RenderPresent(renderer);
+				playAgain(quit);
 			}
-			playAgain(quit);
 		}
 	}
 	close();
@@ -138,56 +141,36 @@ bool loadMedia()
 	std::string resPath = getSourcesPath();
 	std::string fontPath = resPath + std::string("Font/visitor1.ttf");
 	std::string imgPath = resPath + std::string("Images/Cells.png");
+	// Tạo màu background
+	SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
+
 	// Tạo các font chữ sẽ hiện lên màn hình
-	fGameOver = TTF_OpenFont(fontPath.c_str(), 40);
-	if (fGameOver == NULL)
+	fGame = TTF_OpenFont(fontPath.c_str(), 40);
+	if (fGame == NULL)
 	{
 		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
 		success = false;
 	}
 	else
 	{
-		SDL_Color textColor = {140, 140, 140};
-		if (!gGameOver.loadFromRenderedText("GAME OVER", textColor))
+		if (!gGameOver.loadFromRenderedText("GAME OVER", {140, 140, 140}))
+		{
+			std::cout << "Khong the tao text!" << std::endl;
+			success = false;
+		}
+		if (!gWin.loadFromRenderedText("You Win", {140, 140, 140}))
+		{
+			std::cout << "Khong the tao text!" << std::endl;
+			success = false;
+		}
+		if (!gPlayAgainTexture.loadFromRenderedText("Press s to play again!", {30, 100, 100}))
 		{
 			std::cout << "Khong the tao text!" << std::endl;
 			success = false;
 		}
 	}
 
-	fWin = TTF_OpenFont(fontPath.c_str(), 40);
-	if (fWin == NULL)
-	{
-		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
-		success = false;
-	}
-	else
-	{
-		SDL_Color textColor = {140, 140, 140};
-		if (!gWin.loadFromRenderedText("You Win", textColor))
-		{
-			std::cout << "Khong the tao text!" << std::endl;
-			success = false;
-		}
-	}
-
-	fPlayAgain = TTF_OpenFont(fontPath.c_str(), 40);
-	if (fPlayAgain == NULL)
-	{
-		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
-		success = false;
-	}
-	else
-	{
-		SDL_Color textColor = {30, 100, 100};
-		if (!gPlayAgainTexture.loadFromRenderedText("Press s to play again!", textColor))
-		{
-			std::cout << "Khong the tao text!" << std::endl;
-			success = false;
-		}
-	}
-
-	// Tạo sân mìn
+	// Cắt các ô mìn từ hình ảnh Cells.png
 	if (!buttonSpriteSheetTexture.loadFromFile(imgPath.c_str()))
 	{
 		std::cout << "Khong the load cac o min" << std::endl;
@@ -195,7 +178,6 @@ bool loadMedia()
 	}
 	else
 	{
-		// Cắt các ô từ hình ảnh Cells.png
 		for (int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
 		{
 			spriteClips[i].x = i * CELL_SIZE;
@@ -345,10 +327,8 @@ void close()
 	gWin.free();
 	gGameOver.free();
 
-	// Đóng các font
-	TTF_CloseFont(fGameOver);
-	TTF_CloseFont(fPlayAgain);
-	TTF_CloseFont(fWin);
+	// Đóng font
+	TTF_CloseFont(fGame);
 
 	// Đóng cửa sổ và renderer
 	SDL_DestroyWindow(window);
@@ -358,5 +338,6 @@ void close()
 
 	// Thoát SDL
 	IMG_Quit();
+	TTF_Quit();
 	SDL_Quit();
 }

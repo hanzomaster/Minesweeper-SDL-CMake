@@ -18,9 +18,7 @@ extern int screenHeight;
 extern SDL_Renderer *renderer;
 
 // Các font chữ trong game
-extern TTF_Font *fGameOver;
-extern TTF_Font *fPlayAgain;
-extern TTF_Font *fWin;
+extern TTF_Font *fGame;
 
 // Mouse button texture
 extern SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];

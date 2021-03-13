@@ -21,11 +21,14 @@ public:
 	// Lấy vị trí ảnh
 	int getWidth();
 	int getHeight();
+	SDL_Rect getRect() const;
+	SDL_Texture *getTexture();
 
 private:
 	SDL_Texture *mTexture;
 
 	// Vị trí ảnh
+	SDL_Rect rect;
 	int mWidth;
 	int mHeight;
 };

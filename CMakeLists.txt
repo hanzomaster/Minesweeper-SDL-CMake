@@ -20,6 +20,7 @@ set(SOURCES
 	src/Button.cpp
 	src/Texture.cpp
 	src/Variables.cpp
+	src/StartScreen.cpp
 	)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(

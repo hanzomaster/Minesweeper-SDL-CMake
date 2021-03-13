@@ -9,21 +9,21 @@ void Button::reveal(int i, int j)
 		sBoard[i][j] = board[i][j];
 		if (sBoard[i][j] == 0)
 		{
-			if (i < rowSize - 1 && board[i + 1][j] != MINE)
+			if (i < rowSize && board[i + 1][j] != MINE)
 				reveal(i + 1, j);
-			if (i > 0 && board[i - 1][j] != MINE)
+			if (i > 1 && board[i - 1][j] != MINE)
 				reveal(i - 1, j);
-			if (j < columnSize - 1 && board[i][j + 1] != MINE)
+			if (j < columnSize && board[i][j + 1] != MINE)
 				reveal(i, j + 1);
-			if (j > 0 && board[i][j - 1] != MINE)
+			if (j > 1 && board[i][j - 1] != MINE)
 				reveal(i, j - 1);
-			if (i > 0 && j > 0 && board[i - 1][j - 1] != MINE)
+			if (i > 1 && j > 1 && board[i - 1][j - 1] != MINE)
 				reveal(i - 1, j - 1);
-			if (i < rowSize - 1 && j < columnSize - 1 && board[i + 1][j + 1] != MINE)
+			if (i < rowSize && j < columnSize && board[i + 1][j + 1] != MINE)
 				reveal(i + 1, j + 1);
-			if (i > 0 && j < columnSize - 1 && board[i - 1][j + 1] != MINE)
+			if (i > 1 && j < columnSize && board[i - 1][j + 1] != MINE)
 				reveal(i - 1, j + 1);
-			if (i < rowSize - 1 && j > 0 && board[i + 1][j - 1] != MINE)
+			if (i < rowSize && j > 1 && board[i + 1][j - 1] != MINE)
 				reveal(i + 1, j - 1);
 		}
 	}

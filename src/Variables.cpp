@@ -13,9 +13,7 @@ int screenHeight = 500;
 SDL_Renderer *renderer;
 
 // Các font chữ trong game
-TTF_Font *fGameOver;
-TTF_Font *fPlayAgain;
-TTF_Font *fWin;
+TTF_Font *fGame;
 
 // Mouse button texture
 SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
