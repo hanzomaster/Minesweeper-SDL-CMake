@@ -12,6 +12,7 @@ std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(colum
 bool init();
 std::string getSourcesPath();
 bool loadMedia();
+void resizeBoard(int rowSize, int columnSize);
 void createTableWithMine();
 bool checkWinning();
 void mineManager();
@@ -20,7 +21,7 @@ void playAgain(bool &quitGame);
 void close();
 int main(int argc, char *argv[])
 {
-	// TODO: Làm menu cho game
+	// BUG: Số hàng và cột của bàn mìn không thể lên được 14
 	if (!init())
 		std::cout << "Khoi tao chuong trinh that bai..." << std::endl;
 	else if (!loadMedia())
@@ -28,8 +29,30 @@ int main(int argc, char *argv[])
 	else
 	{
 		int menuOption = showMenu();
-		if (menuOption == 0)
+		switch (menuOption)
 		{
+		case NewGame:
+		{
+			int gameModeOption = showGameMode();
+			switch (gameModeOption)
+			{
+			case Easy:
+			{
+				numOfMine = 10;
+				rowSize = 9;
+				columnSize = 9;
+				resizeBoard(rowSize, columnSize);
+				break;
+			}
+			case Medium:
+			{
+				numOfMine = 25;
+				rowSize = 13;
+				columnSize = 13;
+				resizeBoard(rowSize, columnSize);
+				break;
+			}
+			}
 			bool quit = false;
 			SDL_Event event;
 			createTableWithMine();
@@ -67,6 +90,10 @@ int main(int argc, char *argv[])
 				}
 				playAgain(quit);
 			}
+		}
+		break;
+		case Exit:
+			break;
 		}
 	}
 	close();
@@ -185,12 +212,21 @@ bool loadMedia()
 			spriteClips[i].w = CELL_SIZE;
 			spriteClips[i].h = CELL_SIZE;
 		}
-		// Tạo vị trí các ô
-		for (int i = 1; i <= rowSize; ++i)
-			for (int j = 1; j <= columnSize; ++j)
-				gButtons[i][j].setPosition(j * CELL_SIZE + DISTANCE_BETWEEN, i * CELL_SIZE + DISTANCE_BETWEEN);
 	}
 	return success;
+}
+
+void resizeBoard(int rowSize, int columnSize)
+{
+	board.resize(rowSize + 2, std::vector<int>(columnSize + 2, 0));
+	sBoard.resize(rowSize + 2, std::vector<int>(columnSize + 2, COVER));
+	gButtons.resize(rowSize + 2, std::vector<Button>(columnSize + 2));
+	countMineLeft = numOfMine;
+	DISTANCE_BETWEEN = (screenWidth - (rowSize + 2) * CELL_SIZE) / 2;
+	// Tạo vị trí các ô
+	for (int i = 1; i <= rowSize; ++i)
+		for (int j = 1; j <= columnSize; ++j)
+			gButtons[i][j].setPosition(j * CELL_SIZE + DISTANCE_BETWEEN, i * CELL_SIZE + DISTANCE_BETWEEN);
 }
 
 void createTableWithMine()

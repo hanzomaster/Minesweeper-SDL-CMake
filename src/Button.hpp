@@ -15,7 +15,7 @@ public:
 	void setPosition(int x, int y);
 
 	// Nhận phản hồi từ chuột
-	void handleEvents(SDL_Event *e);
+	void handleEvents(SDL_Event *event);
 
 	// Đưa ra màn hình
 	void render(int i, int j);

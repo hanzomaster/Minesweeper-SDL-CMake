@@ -50,6 +50,18 @@ enum title
 	FLAG
 };
 
+enum gameModeSelect
+{
+	Easy,
+	Medium,
+};
+
+enum menuSelect
+{
+	NewGame,
+	Exit,
+};
+
 // Vị trí sân mìn
 extern int DISTANCE_BETWEEN;
 

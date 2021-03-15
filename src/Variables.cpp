@@ -6,13 +6,13 @@ extern const int BUTTON_SPRITE_TOTAL;
 
 // Biến window và kích cỡ
 SDL_Window *window;
-int screenWidth = 500;
-int screenHeight = 500;
+int screenWidth = 700;
+int screenHeight = 700;
 
 // The window renderer
 SDL_Renderer *renderer;
 
-// Các font chữ trong game
+// Font chữ trong game
 TTF_Font *fGame;
 
 // Mouse button texture
@@ -26,7 +26,7 @@ Texture gPlayAgainTexture;
 Texture gWin;
 
 // Tổng số mìn
-int numOfMine = 10;
+int numOfMine;
 
 // Kích cỡ sân mìn
 int rowSize = 9;
@@ -39,7 +39,7 @@ bool isWinning = false;
 std::stringstream mineLeft;
 
 // Vị trí sân mìn
-int DISTANCE_BETWEEN = (screenWidth - rowSize * CELL_SIZE - 50) / 2;
+int DISTANCE_BETWEEN;
 
 // Sân mìn mẫu
 std::vector<std::vector<int>> board(rowSize + 2, std::vector<int>(columnSize + 2, 0));
