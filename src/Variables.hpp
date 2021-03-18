@@ -53,13 +53,15 @@ enum title
 enum gameModeSelect
 {
 	Easy,
-	Medium,
+	Medium
 };
 
 enum menuSelect
 {
 	NewGame,
 	Exit,
+	Back,
+	Quit
 };
 
 // Vị trí sân mìn

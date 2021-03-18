@@ -17,83 +17,108 @@ void createTableWithMine();
 bool checkWinning();
 void mineManager();
 void flagManager();
-void playAgain(bool &quitGame);
+void playAgain(bool &quitGame, bool &quit);
 void close();
 int main(int argc, char *argv[])
 {
-	// BUG: Số hàng và cột của bàn mìn không thể lên được 14
+	// BUG: Số hàng và cột của bàn mìn không thể vượt quá 10 (đôi lúc 11 vẫn được) ????
+	// TODO: Thêm nút continue
 	if (!init())
 		std::cout << "Khoi tao chuong trinh that bai..." << std::endl;
 	else if (!loadMedia())
 		std::cout << "Khoi tao phong chu that bai..." << std::endl;
 	else
 	{
-		int menuOption = showMenu();
-		switch (menuOption)
+		bool quit = false, quitGame = false;
+		while (!quit)
 		{
-		case NewGame:
-		{
-			int gameModeOption = showGameMode();
-			switch (gameModeOption)
+			int menuOption = showMenu();
+			switch (menuOption)
 			{
-			case Easy:
+			case NewGame:
 			{
-				numOfMine = 10;
-				rowSize = 9;
-				columnSize = 9;
-				resizeBoard(rowSize, columnSize);
-				break;
-			}
-			case Medium:
-			{
-				numOfMine = 25;
-				rowSize = 13;
-				columnSize = 13;
-				resizeBoard(rowSize, columnSize);
-				break;
-			}
-			}
-			bool quit = false;
-			SDL_Event event;
-			createTableWithMine();
-			// Vòng lặp của game
-			while (!quit)
-			{
-				while (!gameOver && !quit && !isWinning)
+				int gameModeOption = showGameMode();
+				switch (gameModeOption)
 				{
-					// Xử lí các thao tác
-					while (SDL_PollEvent(&event) != 0)
+				case Easy:
+				{
+					quitGame = false;
+					numOfMine = 10;
+					rowSize = 9;
+					columnSize = 9;
+					resizeBoard(rowSize, columnSize);
+					break;
+				}
+				case Medium:
+				{
+					quitGame = false;
+					numOfMine = 40;
+					rowSize = 16;
+					columnSize = 16;
+					resizeBoard(rowSize, columnSize);
+					break;
+				}
+				case Quit:
+				{
+					quitGame = true;
+					quit = true;
+					break;
+				}
+				default:
+					quitGame = true;
+					break;
+				}
+				SDL_Event event;
+				createTableWithMine();
+				// Vòng lặp của game
+				while (!quitGame)
+				{
+					while (!gameOver && !quitGame && !isWinning)
 					{
-						if (event.type == SDL_QUIT)
-							quit = true;
-						else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-							quit = true;
+						// Xử lí các thao tác
+						while (SDL_PollEvent(&event) != 0)
+						{
+							if (event.type == SDL_QUIT)
+							{
+								quitGame = true;
+								quit = true;
+							}
+							else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+							{
+								quitGame = true;
+								for (int i = 0; i < rowSize + 2; ++i)
+									fill(board[i].begin(), board[i].end(), 0);
+								for (int i = 1; i <= rowSize; ++i)
+									for (int j = 1; j <= columnSize; ++j)
+										sBoard[i][j] = COVER;
+							}
+							for (int i = 1; i <= rowSize; ++i)
+								for (int j = 1; j <= columnSize; ++j)
+									gButtons[i][j].handleEvents(&event);
+							isWinning = checkWinning();
+						}
+
+						SDL_RenderClear(renderer);
+
+						// Vẽ sân mìn
 						for (int i = 1; i <= rowSize; ++i)
 							for (int j = 1; j <= columnSize; ++j)
-								gButtons[i][j].handleEvents(&event);
-						isWinning = checkWinning();
+								gButtons[i][j].render(i, j);
+
+						mineManager();
+
+						flagManager();
+
+						SDL_RenderPresent(renderer);
 					}
-
-					// Tạo background
-					SDL_RenderClear(renderer);
-
-					// Vẽ sân mìn
-					for (int i = 1; i <= rowSize; ++i)
-						for (int j = 1; j <= columnSize; ++j)
-							gButtons[i][j].render(i, j);
-
-					mineManager();
-
-					flagManager();
-
-					SDL_RenderPresent(renderer);
+					playAgain(quitGame, quit);
 				}
-				playAgain(quit);
+				break;
 			}
-		}
-		break;
-		case Exit:
-			break;
+			case Exit:
+				quit = true;
+				break;
+			}
 		}
 	}
 	close();
@@ -112,7 +137,6 @@ bool init()
 	{
 		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 			std::cout << "Loc tuyen tinh khong duoc khoi dong" << std::endl;
-
 		window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
 		if (window == NULL)
 		{
@@ -218,9 +242,15 @@ bool loadMedia()
 
 void resizeBoard(int rowSize, int columnSize)
 {
-	board.resize(rowSize + 2, std::vector<int>(columnSize + 2, 0));
+	board.resize(rowSize + 2, std::vector<int>());
+	for (int i = 0; i < rowSize + 2; ++i)
+		board[i].resize(columnSize + 2, 0);
 	sBoard.resize(rowSize + 2, std::vector<int>(columnSize + 2, COVER));
+	for (int i = 0; i < rowSize + 2; ++i)
+		sBoard[i].resize(columnSize + 2, COVER);
 	gButtons.resize(rowSize + 2, std::vector<Button>(columnSize + 2));
+	for (int i = 0; i < rowSize + 2; ++i)
+		gButtons[i].resize(columnSize + 2);
 	countMineLeft = numOfMine;
 	DISTANCE_BETWEEN = (screenWidth - (rowSize + 2) * CELL_SIZE) / 2;
 	// Tạo vị trí các ô
@@ -329,28 +359,49 @@ void flagManager()
 	}
 }
 
-void playAgain(bool &quitGame)
+void playAgain(bool &quitGame, bool &quit)
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0)
 	{
-		// Nếu người dùng nhấn 's' để chơi lại
-		if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
-			quitGame = true;
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
+		switch (event.type)
 		{
-			countMineLeft = numOfMine;
-			gameOver = false;
-			isWinning = false;
-			quitGame = false;
+		case SDL_QUIT:
+		{
+			quitGame = true;
+			quit = true;
+			break;
+		}
+		case SDL_KEYDOWN:
+		{
+			// Nếu người dùng nhấn 's' để chơi lại
+			if (event.key.keysym.sym == SDLK_s)
+			{
+				countMineLeft = numOfMine;
+				gameOver = false;
+				isWinning = false;
 
-			// Tạo lại sân mìn
-			for (int i = 0; i < rowSize + 2; ++i)
-				fill(board[i].begin(), board[i].end(), 0);
-			for (int i = 1; i <= rowSize; ++i)
-				for (int j = 0; j <= columnSize; ++j)
-					sBoard[i][j] = COVER;
-			createTableWithMine();
+				// Tạo lại sân mìn
+				for (int i = 0; i < rowSize + 2; ++i)
+					fill(board[i].begin(), board[i].end(), 0);
+				for (int i = 1; i <= rowSize; ++i)
+					for (int j = 1; j <= columnSize; ++j)
+						sBoard[i][j] = COVER;
+				createTableWithMine();
+			}
+			// Nhấn nút escape để quay về menu
+			else if (event.key.keysym.sym == SDLK_ESCAPE)
+			{
+				quitGame = true;
+				gameOver = false;
+				isWinning = false;
+				for (int i = 0; i < rowSize + 2; ++i)
+					fill(board[i].begin(), board[i].end(), 0);
+				for (int i = 1; i <= rowSize; ++i)
+					for (int j = 1; j <= columnSize; ++j)
+						sBoard[i][j] = COVER;
+			}
+		}
 		}
 	}
 }

@@ -6,8 +6,8 @@ extern const int BUTTON_SPRITE_TOTAL;
 
 // Biến window và kích cỡ
 SDL_Window *window;
-int screenWidth = 700;
-int screenHeight = 700;
+int screenWidth = 800;
+int screenHeight = 800;
 
 // The window renderer
 SDL_Renderer *renderer;
@@ -33,7 +33,7 @@ int rowSize = 9;
 int columnSize = 9;
 
 // Biến trò chơi
-int countMineLeft = numOfMine;
+int countMineLeft;
 bool gameOver = false;
 bool isWinning = false;
 std::stringstream mineLeft;

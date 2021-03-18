@@ -31,10 +31,10 @@ int showMenu()
 			switch (event.type)
 			{
 			case SDL_QUIT:
-				return -1;
+				return Exit;
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return -1;
+					return Exit;
 			case SDL_MOUSEMOTION:
 			{
 				posx = event.motion.x;
@@ -64,7 +64,11 @@ int showMenu()
 				posy = event.button.y;
 				for (int i = 0; i < menuItem; ++i)
 					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
+					{
+						for (int j = 0; j < menuItem; ++j)
+							textMenu[i].free();
 						return i;
+					}
 			}
 			}
 		}
@@ -95,10 +99,10 @@ int showGameMode()
 			switch (event.type)
 			{
 			case SDL_QUIT:
-				return -1;
+				return Quit;
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return -1;
+					return Back;
 			case SDL_MOUSEMOTION:
 			{
 				posx = event.motion.x;
@@ -128,7 +132,11 @@ int showGameMode()
 				posy = event.button.y;
 				for (int i = 0; i < numOfGameMode; ++i)
 					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
+					{
+						for (int j = 0; j < numOfGameMode; ++j)
+							textMenu[i].free();
 						return i;
+					}
 			}
 			}
 		}

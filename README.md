@@ -12,9 +12,9 @@ Trước khi download file zip về cần có [Visual Studio Build Tool 2019](ht
 
 ## Các tính năng và luật chơi
 
-- Luật chơi dò mìn truyền thống với khu vực chơi 9x9 và 10 mìn
-- Các quả bom được rải ngẫu nhiên sau mỗi lần chơi
-- Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu bom và chuột giữa để khám phá các ô xung quanh khi phát hiện bom
+- Luật chơi dò mìn truyền thống với 2 chế độ chơi Easy (9x9 và 10 mìn) hoặc Medium (13x13 và 25 mìn)
+- Các quả mìn được rải ngẫu nhiên sau mỗi lần chơi
+- Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu mìn và chuột giữa/chuột phải để mở các ô xung quanh khi đã đoán đúng vị trí mìn
 - Khi bạn thắng hoặc thua, hãy nhấn nút 's' trên bàn phím để chơi lại hoặc nút 'esc' để thoát
 
 ### tags: `SDL2` `C++` `Minesweeper`
