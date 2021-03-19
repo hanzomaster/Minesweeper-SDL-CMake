@@ -79,9 +79,16 @@ void Button::handleEvents(SDL_Event *event)
 			{
 			case SDL_BUTTON_LEFT:
 			{
-				reveal(i, j);
+				if (sBoard[i][j] == COVER)
+				{
+					reveal(i, j);
+					Mix_PlayChannel(-1, openCell, 0);
+				}
 				if (board[i][j] == MINE)
+				{
 					gameOver = true;
+					Mix_PlayChannel(-1, mineFounded, 0);
+				}
 				break;
 			}
 			case SDL_BUTTON_RIGHT:
@@ -90,19 +97,22 @@ void Button::handleEvents(SDL_Event *event)
 				{
 					if (countMineLeft == 0)
 						break;
+					Mix_PlayChannel(-1, openCell, 0);
+
 					sBoard[i][j] = FLAG;
 					countMineLeft--;
 				}
 				else if (sBoard[i][j] == FLAG)
 				{
+					Mix_PlayChannel(-1, openCell, 0);
 					sBoard[i][j] = COVER;
 					countMineLeft++;
 				}
-			}
-			case SDL_BUTTON_MIDDLE:
-			{
-				if (sBoard[i][j] < MINE && correctFlag(i, j))
+				else if (sBoard[i][j] < MINE && correctFlag(i, j))
+				{
 					revealSurrounding(i, j);
+					Mix_PlayChannel(-1, openCell, 0);
+				}
 				break;
 			}
 			}

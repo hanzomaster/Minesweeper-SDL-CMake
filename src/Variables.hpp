@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <sstream>
 #include <vector>
 #include "Texture.hpp"
@@ -17,10 +18,10 @@ extern int screenHeight;
 // The window renderer
 extern SDL_Renderer *renderer;
 
-// Các font chữ trong game
+// Font chữ trong game
 extern TTF_Font *fGame;
 
-// Mouse button texture
+// Biến để cắt ảnh các ô số và mìn
 extern SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
 extern Texture buttonSpriteSheetTexture;
 
@@ -29,6 +30,12 @@ extern Texture gGameOver;
 extern Texture gMineLeftTexture;
 extern Texture gPlayAgainTexture;
 extern Texture gWin;
+
+// Biến âm thanh trong game
+extern Mix_Chunk *menuClick;
+extern Mix_Chunk *openCell;
+extern Mix_Chunk *mineFounded;
+extern Mix_Music *winning;
 
 // Tổng số mìn
 extern int numOfMine;

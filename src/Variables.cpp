@@ -15,7 +15,7 @@ SDL_Renderer *renderer;
 // Font chữ trong game
 TTF_Font *fGame;
 
-// Mouse button texture
+// Biến để cắt ảnh các ô số và mìn
 SDL_Rect spriteClips[BUTTON_SPRITE_TOTAL];
 Texture buttonSpriteSheetTexture;
 
@@ -24,6 +24,12 @@ Texture gGameOver;
 Texture gMineLeftTexture;
 Texture gPlayAgainTexture;
 Texture gWin;
+
+// Biến âm thanh trong game
+Mix_Chunk *menuClick;
+Mix_Chunk *openCell;
+Mix_Chunk *mineFounded;
+Mix_Music *winning;
 
 // Tổng số mìn
 int numOfMine;

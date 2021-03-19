@@ -21,7 +21,6 @@ void playAgain(bool &quitGame, bool &quit);
 void close();
 int main(int argc, char *argv[])
 {
-	// BUG: Số hàng và cột của bàn mìn không thể vượt quá 10 (đôi lúc 11 vẫn được) ????
 	// TODO: Thêm nút continue
 	if (!init())
 		std::cout << "Khoi tao chuong trinh that bai..." << std::endl;
@@ -163,6 +162,11 @@ bool init()
 					std::cout << "Khong the khoi dong SDL_ttf! SDL_ttf error: " << TTF_GetError() << std::endl;
 					success = false;
 				}
+				if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					std::cout << "Khong the khoi dong SDL_mixer! SDl_mixer error: " << Mix_GetError() << std::endl;
+					success = false;
+				}
 			}
 		}
 	}
@@ -192,6 +196,10 @@ bool loadMedia()
 	std::string resPath = getSourcesPath();
 	std::string fontPath = resPath + std::string("Font/visitor1.ttf");
 	std::string imgPath = resPath + std::string("Images/Cells.png");
+	std::string menuSoundPath = resPath + std::string("Sound/Menu.wav");
+	std::string clickSoundPath = resPath + std::string("Sound/OpenCell.wav");
+	std::string mineSoundPath = resPath + std::string("Sound/MineHit.wav");
+	std::string winSoundPath = resPath + std::string("Sound/Winning.wav");
 	// Tạo màu background
 	SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
 
@@ -202,23 +210,21 @@ bool loadMedia()
 		std::cout << "Khong the mo font visitor1! SDL_ttf error: " << TTF_GetError() << std::endl;
 		success = false;
 	}
-	else
+	else if (!gGameOver.loadFromRenderedText("GAME OVER", {140, 140, 140}) || !gPlayAgainTexture.loadFromRenderedText("Press s to play again!", {30, 100, 100}) || !gWin.loadFromRenderedText("You Win", {140, 140, 140}))
 	{
-		if (!gGameOver.loadFromRenderedText("GAME OVER", {140, 140, 140}))
-		{
-			std::cout << "Khong the tao text!" << std::endl;
-			success = false;
-		}
-		if (!gWin.loadFromRenderedText("You Win", {140, 140, 140}))
-		{
-			std::cout << "Khong the tao text!" << std::endl;
-			success = false;
-		}
-		if (!gPlayAgainTexture.loadFromRenderedText("Press s to play again!", {30, 100, 100}))
-		{
-			std::cout << "Khong the tao text!" << std::endl;
-			success = false;
-		}
+		std::cout << "Khong the tao text!" << std::endl;
+		success = false;
+	}
+
+	// Load các âm thanh
+	menuClick = Mix_LoadWAV(menuSoundPath.c_str());
+	openCell = Mix_LoadWAV(clickSoundPath.c_str());
+	mineFounded = Mix_LoadWAV(mineSoundPath.c_str());
+	winning = Mix_LoadMUS(winSoundPath.c_str());
+	if (menuClick == nullptr || openCell == nullptr || mineFounded == nullptr || winning == nullptr)
+	{
+		std::cout << "Khong the load am thanh!" << std::endl;
+		success = false;
 	}
 
 	// Cắt các ô mìn từ hình ảnh Cells.png
@@ -253,6 +259,7 @@ void resizeBoard(int rowSize, int columnSize)
 		gButtons[i].resize(columnSize + 2);
 	countMineLeft = numOfMine;
 	DISTANCE_BETWEEN = (screenWidth - (rowSize + 2) * CELL_SIZE) / 2;
+
 	// Tạo vị trí các ô
 	for (int i = 1; i <= rowSize; ++i)
 		for (int j = 1; j <= columnSize; ++j)
@@ -340,6 +347,8 @@ void flagManager()
 		gWin.render((screenWidth - gWin.getWidth()) / 2, 30);
 
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
+
+		Mix_PlayMusic(winning, 0);
 	}
 	if (gameOver)
 	{
@@ -377,6 +386,7 @@ void playAgain(bool &quitGame, bool &quit)
 			// Nếu người dùng nhấn 's' để chơi lại
 			if (event.key.keysym.sym == SDLK_s)
 			{
+				Mix_HaltMusic();
 				countMineLeft = numOfMine;
 				gameOver = false;
 				isWinning = false;
@@ -392,6 +402,7 @@ void playAgain(bool &quitGame, bool &quit)
 			// Nhấn nút escape để quay về menu
 			else if (event.key.keysym.sym == SDLK_ESCAPE)
 			{
+				Mix_HaltMusic();
 				quitGame = true;
 				gameOver = false;
 				isWinning = false;
@@ -417,6 +428,11 @@ void close()
 	// Đóng font
 	TTF_CloseFont(fGame);
 
+	// Đóng các âm thanh
+	Mix_FreeChunk(menuClick);
+	Mix_FreeChunk(openCell);
+	Mix_FreeChunk(mineFounded);
+
 	// Đóng cửa sổ và renderer
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
@@ -424,6 +440,7 @@ void close()
 	renderer = nullptr;
 
 	// Thoát SDL
+	Mix_CloseAudio();
 	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();
