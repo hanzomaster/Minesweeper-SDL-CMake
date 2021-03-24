@@ -7,6 +7,8 @@ void Button::reveal(int i, int j)
 		if (sBoard[i][j] == FLAG)
 			countMineLeft++;
 		sBoard[i][j] = board[i][j];
+		if (board[i][j] == MINE)
+			gameOver = true;
 		if (sBoard[i][j] == 0)
 		{
 			if (i < rowSize && board[i + 1][j] != MINE)
@@ -31,11 +33,15 @@ void Button::reveal(int i, int j)
 
 bool Button::correctFlag(int i, int j)
 {
+	int flags = 0;
 	for (int k = i - 1; k <= i + 1; ++k)
 		for (int l = j - 1; l <= j + 1; ++l)
-			if (board[k][l] == MINE && sBoard[k][l] != FLAG)
-				return false;
-	return true;
+			if (sBoard[k][l] == FLAG)
+				flags++;
+	if (flags == board[i][j])
+		return true;
+	else
+		return false;
 }
 
 void Button::revealSurrounding(int i, int j)
@@ -82,12 +88,8 @@ void Button::handleEvents(SDL_Event *event)
 				if (sBoard[i][j] == COVER)
 				{
 					reveal(i, j);
-					Mix_PlayChannel(-1, openCell, 0);
-				}
-				if (board[i][j] == MINE)
-				{
-					gameOver = true;
-					Mix_PlayChannel(-1, mineFounded, 0);
+					if (board[i][j] != MINE)
+						Mix_PlayChannel(-1, openCell, 0);
 				}
 				break;
 			}
@@ -97,18 +99,21 @@ void Button::handleEvents(SDL_Event *event)
 				{
 					if (countMineLeft == 0)
 						break;
-					Mix_PlayChannel(-1, openCell, 0);
-
+					Mix_PlayChannel(-1, flag, 0);
 					sBoard[i][j] = FLAG;
 					countMineLeft--;
 				}
 				else if (sBoard[i][j] == FLAG)
 				{
-					Mix_PlayChannel(-1, openCell, 0);
+					Mix_PlayChannel(-1, unFlag, 0);
 					sBoard[i][j] = COVER;
 					countMineLeft++;
 				}
-				else if (sBoard[i][j] < MINE && correctFlag(i, j))
+				break;
+			}
+			case SDL_BUTTON_MIDDLE:
+			{
+				if (sBoard[i][j] < MINE && correctFlag(i, j))
 				{
 					revealSurrounding(i, j);
 					Mix_PlayChannel(-1, openCell, 0);

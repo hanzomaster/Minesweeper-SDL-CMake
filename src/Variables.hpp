@@ -34,6 +34,8 @@ extern Texture gWin;
 // Biến âm thanh trong game
 extern Mix_Chunk *menuClick;
 extern Mix_Chunk *openCell;
+extern Mix_Chunk *flag;
+extern Mix_Chunk *unFlag;
 extern Mix_Chunk *mineFounded;
 extern Mix_Music *winning;
 

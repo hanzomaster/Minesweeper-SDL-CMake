@@ -83,7 +83,7 @@ int showGameMode()
 	Texture textMenu[numOfGameMode];
 	bool selected[numOfGameMode] = {false, false};
 	const char *labels[numOfGameMode] = {"Easy (9x9 10 mines)",
-										 "Medium (13x13 25 mines)"};
+										 "Medium (16x16 40 mines)"};
 	int posx = 0, posy = 0;
 
 	for (int i = 0; i < numOfGameMode; ++i)

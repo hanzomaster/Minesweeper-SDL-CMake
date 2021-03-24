@@ -74,6 +74,8 @@ int main(int argc, char *argv[])
 				{
 					while (!gameOver && !quitGame && !isWinning)
 					{
+						SDL_RenderClear(renderer);
+
 						// Xử lí các thao tác
 						while (SDL_PollEvent(&event) != 0)
 						{
@@ -96,8 +98,6 @@ int main(int argc, char *argv[])
 									gButtons[i][j].handleEvents(&event);
 							isWinning = checkWinning();
 						}
-
-						SDL_RenderClear(renderer);
 
 						// Vẽ sân mìn
 						for (int i = 1; i <= rowSize; ++i)
@@ -198,6 +198,8 @@ bool loadMedia()
 	std::string imgPath = resPath + std::string("Images/Cells.png");
 	std::string menuSoundPath = resPath + std::string("Sound/Menu.wav");
 	std::string clickSoundPath = resPath + std::string("Sound/OpenCell.wav");
+	std::string flagSoundPath = resPath + std::string("Sound/Flag.wav");
+	std::string un_flagSoundPath = resPath + std::string("Sound/Unflag.wav");
 	std::string mineSoundPath = resPath + std::string("Sound/MineHit.wav");
 	std::string winSoundPath = resPath + std::string("Sound/Winning.wav");
 	// Tạo màu background
@@ -219,9 +221,11 @@ bool loadMedia()
 	// Load các âm thanh
 	menuClick = Mix_LoadWAV(menuSoundPath.c_str());
 	openCell = Mix_LoadWAV(clickSoundPath.c_str());
+	flag = Mix_LoadWAV(flagSoundPath.c_str());
+	unFlag = Mix_LoadWAV(un_flagSoundPath.c_str());
 	mineFounded = Mix_LoadWAV(mineSoundPath.c_str());
 	winning = Mix_LoadMUS(winSoundPath.c_str());
-	if (menuClick == nullptr || openCell == nullptr || mineFounded == nullptr || winning == nullptr)
+	if (menuClick == nullptr || openCell == nullptr || mineFounded == nullptr || winning == nullptr || flag == nullptr || unFlag == nullptr)
 	{
 		std::cout << "Khong the load am thanh!" << std::endl;
 		success = false;
@@ -365,6 +369,8 @@ void flagManager()
 		gGameOver.render((screenWidth - gGameOver.getWidth()) / 2, 30);
 
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
+
+		Mix_PlayChannel(-1, mineFounded, 0);
 	}
 }
 

@@ -28,6 +28,8 @@ Texture gWin;
 // Biến âm thanh trong game
 Mix_Chunk *menuClick;
 Mix_Chunk *openCell;
+Mix_Chunk *flag;
+Mix_Chunk *unFlag;
 Mix_Chunk *mineFounded;
 Mix_Music *winning;
 
