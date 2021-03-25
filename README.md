@@ -12,7 +12,7 @@ Trước khi download file zip về cần có [Visual Studio Build Tool 2019](ht
 
 ## Các tính năng và luật chơi
 
-- Luật chơi dò mìn truyền thống với 2 chế độ chơi Easy (9x9 và 10 mìn) hoặc Medium (13x13 và 25 mìn)
+- Luật chơi dò mìn truyền thống với 2 chế độ chơi Easy (9x9 và 10 mìn) hoặc Medium (16x16 40 mìn)
 - Các quả mìn được rải ngẫu nhiên sau mỗi lần chơi
-- Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu mìn hoặc để mở các ô xung quanh khi đã đoán đúng vị trí mìn
+- Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu mìn và chuột giữa để mở các ô xung quanh khi đã đoán đúng vị trí mìn
 - Khi bạn thắng hoặc thua, hãy nhấn nút 's' trên bàn phím để chơi lại chế độ đã chọn hoặc nút 'esc' để thoát về menu

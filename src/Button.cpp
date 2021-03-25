@@ -9,7 +9,7 @@ void Button::reveal(int i, int j)
 		sBoard[i][j] = board[i][j];
 		if (board[i][j] == MINE)
 			gameOver = true;
-		if (sBoard[i][j] == 0)
+		if (sBoard[i][j] == BLANK)
 		{
 			if (i < rowSize && board[i + 1][j] != MINE)
 				reveal(i + 1, j);

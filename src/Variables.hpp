@@ -54,6 +54,7 @@ extern std::stringstream mineLeft;
 
 enum title
 {
+	BLANK,
 	MINE = 9,
 	COVER,
 	FLAG

@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 					{
 						SDL_RenderClear(renderer);
 
-						// Xử lí các thao tác
+						// Xử lí các thao tác người dùng
 						while (SDL_PollEvent(&event) != 0)
 						{
 							if (event.type == SDL_QUIT)
@@ -88,10 +88,9 @@ int main(int argc, char *argv[])
 							{
 								quitGame = true;
 								for (int i = 0; i < rowSize + 2; ++i)
-									fill(board[i].begin(), board[i].end(), 0);
-								for (int i = 1; i <= rowSize; ++i)
-									for (int j = 1; j <= columnSize; ++j)
-										sBoard[i][j] = COVER;
+									fill(board[i].begin(), board[i].end(), BLANK);
+								for (int i = 0; i < rowSize + 2; ++i)
+									fill(sBoard[i].begin(), sBoard[i].end(), COVER);
 							}
 							for (int i = 1; i <= rowSize; ++i)
 								for (int j = 1; j <= columnSize; ++j)
@@ -254,11 +253,11 @@ void resizeBoard(int rowSize, int columnSize)
 {
 	board.resize(rowSize + 2, std::vector<int>());
 	for (int i = 0; i < rowSize + 2; ++i)
-		board[i].resize(columnSize + 2, 0);
-	sBoard.resize(rowSize + 2, std::vector<int>(columnSize + 2, COVER));
+		board[i].resize(columnSize + 2, BLANK);
+	sBoard.resize(rowSize + 2, std::vector<int>());
 	for (int i = 0; i < rowSize + 2; ++i)
 		sBoard[i].resize(columnSize + 2, COVER);
-	gButtons.resize(rowSize + 2, std::vector<Button>(columnSize + 2));
+	gButtons.resize(rowSize + 2, std::vector<Button>());
 	for (int i = 0; i < rowSize + 2; ++i)
 		gButtons[i].resize(columnSize + 2);
 	countMineLeft = numOfMine;
@@ -399,10 +398,9 @@ void playAgain(bool &quitGame, bool &quit)
 
 				// Tạo lại sân mìn
 				for (int i = 0; i < rowSize + 2; ++i)
-					fill(board[i].begin(), board[i].end(), 0);
-				for (int i = 1; i <= rowSize; ++i)
-					for (int j = 1; j <= columnSize; ++j)
-						sBoard[i][j] = COVER;
+					fill(board[i].begin(), board[i].end(), BLANK);
+				for (int i = 1; i < rowSize + 2; ++i)
+					fill(sBoard[i].begin(), sBoard[i].end(), COVER);
 				createTableWithMine();
 			}
 			// Nhấn nút escape để quay về menu
@@ -413,10 +411,9 @@ void playAgain(bool &quitGame, bool &quit)
 				gameOver = false;
 				isWinning = false;
 				for (int i = 0; i < rowSize + 2; ++i)
-					fill(board[i].begin(), board[i].end(), 0);
-				for (int i = 1; i <= rowSize; ++i)
-					for (int j = 1; j <= columnSize; ++j)
-						sBoard[i][j] = COVER;
+					fill(board[i].begin(), board[i].end(), BLANK);
+				for (int i = 1; i < rowSize + 2; ++i)
+					fill(sBoard[i].begin(), sBoard[i].end(), COVER);
 			}
 		}
 		}
