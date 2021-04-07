@@ -5,10 +5,9 @@
 #include <ctime>
 #include "Variables.hpp"
 #include "Texture.hpp"
-#include "Button.hpp"
+#include "Logic.hpp"
 #include "StartScreen.hpp"
 
-std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(columnSize + 2));
 bool init();
 std::string getSourcesPath();
 bool loadMedia();
@@ -21,7 +20,6 @@ void playAgain(bool &quitGame, bool &quit);
 void close();
 int main(int argc, char *argv[])
 {
-	// TODO: Thêm nút continue
 	if (!init())
 		std::cout << "Khoi tao chuong trinh that bai..." << std::endl;
 	else if (!loadMedia())
@@ -50,6 +48,10 @@ int main(int argc, char *argv[])
 				}
 				case Medium:
 				{
+					screenWidth = 800;
+					screenHeight = 800;
+					SDL_SetWindowSize(window, screenWidth, screenHeight);
+					SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 					quitGame = false;
 					numOfMine = 40;
 					rowSize = 16;
@@ -133,8 +135,6 @@ bool init()
 	}
 	else
 	{
-		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-			std::cout << "Loc tuyen tinh khong duoc khoi dong" << std::endl;
 		window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
 		if (window == NULL)
 		{
@@ -194,7 +194,12 @@ bool loadMedia()
 	bool success = true;
 	std::string resPath = getSourcesPath();
 	std::string fontPath = resPath + std::string("Font/visitor1.ttf");
-	std::string imgPath = resPath + std::string("Images/Cells.png");
+
+	std::string iconImgPath = resPath + std::string("Images/Icon.png");
+	std::string mineImgPath = resPath + std::string("Images/Cells.png");
+	std::string sound_onImgPath = resPath + std::string("Images/Sound.png");
+	std::string sound_offImgPath = resPath + std::string("Images/Mute.png");
+
 	std::string menuSoundPath = resPath + std::string("Sound/Menu.wav");
 	std::string clickSoundPath = resPath + std::string("Sound/OpenCell.wav");
 	std::string flagSoundPath = resPath + std::string("Sound/Flag.wav");
@@ -231,7 +236,7 @@ bool loadMedia()
 	}
 
 	// Cắt các ô mìn từ hình ảnh Cells.png
-	if (!buttonSpriteSheetTexture.loadFromFile(imgPath.c_str()))
+	if (!buttonSpriteSheetTexture.loadFromFile(mineImgPath.c_str()))
 	{
 		std::cout << "Khong the load cac o min" << std::endl;
 		success = false;
@@ -246,6 +251,15 @@ bool loadMedia()
 			spriteClips[i].h = CELL_SIZE;
 		}
 	}
+	if (!gameSound.loadFromFile(sound_onImgPath.c_str()))
+	{
+		std::cout << "Khong the load hinh anh cua am thanh" << std::endl;
+		success = false;
+	}
+
+	// Tạo icon cho window
+	SDL_Surface *icon = IMG_Load(iconImgPath.c_str());
+	SDL_SetWindowIcon(window, icon);
 	return success;
 }
 
@@ -427,6 +441,8 @@ void close()
 	gMineLeftTexture.free();
 	gWin.free();
 	gGameOver.free();
+	gPlayAgainTexture.free();
+	gameSound.free();
 
 	// Đóng font
 	TTF_CloseFont(fGame);

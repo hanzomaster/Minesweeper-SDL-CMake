@@ -1,4 +1,4 @@
-#include "Button.hpp"
+#include "Logic.hpp"
 #include "Variables.hpp"
 void Button::reveal(int i, int j)
 {

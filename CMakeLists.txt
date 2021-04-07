@@ -17,7 +17,7 @@ include_directories(
 	)
 set(SOURCES
 	src/main.cpp
-	src/Button.cpp
+	src/Logic.cpp
 	src/Texture.cpp
 	src/Variables.cpp
 	src/StartScreen.cpp

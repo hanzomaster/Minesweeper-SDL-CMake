@@ -6,8 +6,8 @@ extern const int BUTTON_SPRITE_TOTAL;
 
 // Biến window và kích cỡ
 SDL_Window *window;
-int screenWidth = 800;
-int screenHeight = 800;
+int screenWidth = 500;
+int screenHeight = 500;
 
 // The window renderer
 SDL_Renderer *renderer;
@@ -32,6 +32,8 @@ Mix_Chunk *flag;
 Mix_Chunk *unFlag;
 Mix_Chunk *mineFounded;
 Mix_Music *winning;
+Texture gameSound;
+bool isMute;
 
 // Tổng số mìn
 int numOfMine;
@@ -54,3 +56,4 @@ std::vector<std::vector<int>> board(rowSize + 2, std::vector<int>(columnSize + 2
 
 // Sân mìn người chơi sẽ tương tác
 std::vector<std::vector<int>> sBoard(rowSize + 2, std::vector<int>(columnSize + 2, COVER));
+std::vector<std::vector<Button>> gButtons(rowSize + 2, std::vector<Button>(columnSize + 2));

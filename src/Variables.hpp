@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include "Texture.hpp"
+#include "Logic.hpp"
 
 // Kích cỡ một ô mìn
 const int CELL_SIZE = 32;
@@ -38,6 +39,8 @@ extern Mix_Chunk *flag;
 extern Mix_Chunk *unFlag;
 extern Mix_Chunk *mineFounded;
 extern Mix_Music *winning;
+extern Texture gameSound;
+extern bool isMute;
 
 // Tổng số mìn
 extern int numOfMine;
@@ -82,3 +85,4 @@ extern std::vector<std::vector<int>> board;
 
 // Sân mìn người chơi sẽ tương tác
 extern std::vector<std::vector<int>> sBoard;
+extern std::vector<std::vector<Button>> gButtons;

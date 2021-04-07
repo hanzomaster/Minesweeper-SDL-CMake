@@ -10,6 +10,10 @@ bool checkFocusWithRect(const int &x, const int &y, const SDL_Rect &rect)
 
 int showMenu()
 {
+	screenWidth = 500;
+	screenHeight = 500;
+	SDL_SetWindowSize(window, screenWidth, screenHeight);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	static const int menuItem = 2;
 	Texture textMenu[menuItem];
 	bool selected[menuItem] = {false, false};
