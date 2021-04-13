@@ -143,7 +143,7 @@ bool init()
 		}
 		else
 		{
-			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
+			renderer = SDL_CreateRenderer(window, -1, 0);
 			if (renderer == NULL)
 			{
 				std::cout << "Khong the tao but ve! SDL error: " << SDL_GetError() << std::endl;
@@ -242,7 +242,6 @@ bool loadMedia()
 		success = false;
 	}
 	else
-	{
 		for (int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
 		{
 			spriteClips[i].x = i * CELL_SIZE;
@@ -250,7 +249,6 @@ bool loadMedia()
 			spriteClips[i].w = CELL_SIZE;
 			spriteClips[i].h = CELL_SIZE;
 		}
-	}
 	if (!gameSound.loadFromFile(sound_onImgPath.c_str()))
 	{
 		std::cout << "Khong the load hinh anh cua am thanh" << std::endl;
