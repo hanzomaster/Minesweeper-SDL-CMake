@@ -7,6 +7,7 @@
 #include "Texture.hpp"
 #include "Logic.hpp"
 #include "StartScreen.hpp"
+#include "Clock.hpp"
 
 bool init();
 std::string getSourcesPath();
@@ -50,8 +51,6 @@ int main(int argc, char *argv[])
 				{
 					screenWidth = 800;
 					screenHeight = 800;
-					SDL_SetWindowSize(window, screenWidth, screenHeight);
-					SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 					quitGame = false;
 					numOfMine = 40;
 					rowSize = 16;
@@ -74,6 +73,7 @@ int main(int argc, char *argv[])
 				// Vòng lặp của game
 				while (!quitGame)
 				{
+					Clock timer;
 					while (!gameOver && !quitGame && !isWinning)
 					{
 						SDL_RenderClear(renderer);
@@ -104,6 +104,8 @@ int main(int argc, char *argv[])
 						for (int i = 1; i <= rowSize; ++i)
 							for (int j = 1; j <= columnSize; ++j)
 								gButtons[i][j].render(i, j);
+
+						timer.showTime();
 
 						mineManager();
 
@@ -274,6 +276,8 @@ void resizeBoard(int rowSize, int columnSize)
 		gButtons[i].resize(columnSize + 2);
 	countMineLeft = numOfMine;
 	DISTANCE_BETWEEN = (screenWidth - (rowSize + 2) * CELL_SIZE) / 2;
+	SDL_SetWindowSize(window, screenWidth, screenHeight);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
 	// Tạo vị trí các ô
 	for (int i = 1; i <= rowSize; ++i)

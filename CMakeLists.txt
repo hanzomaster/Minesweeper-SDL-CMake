@@ -21,6 +21,7 @@ set(SOURCES
 	src/Texture.cpp
 	src/Variables.cpp
 	src/StartScreen.cpp
+	src/Clock.cpp
 	)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(
