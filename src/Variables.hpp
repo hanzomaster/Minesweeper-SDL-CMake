@@ -6,6 +6,11 @@
 #include <vector>
 #include "Texture.hpp"
 #include "Logic.hpp"
+// Giới hạn fps
+const int FPS = 24;
+const int frameDelay = 1000 / FPS;
+extern Uint32 frameStart;
+extern unsigned int frameTime;
 
 // Kích cỡ một ô mìn
 const int CELL_SIZE = 32;

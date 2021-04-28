@@ -27,6 +27,7 @@ int showMenu()
 	SDL_Event event;
 	while (true)
 	{
+		frameStart = SDL_GetTicks();
 		SDL_RenderClear(renderer);
 		for (int i = 0; i < menuItem; ++i)
 			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * 60);
@@ -78,6 +79,9 @@ int showMenu()
 			}
 		}
 		SDL_RenderPresent(renderer);
+		frameTime = SDL_GetTicks() - frameStart;
+		if (frameDelay > frameTime)
+			SDL_Delay(frameDelay - frameTime);
 	}
 }
 
@@ -96,6 +100,7 @@ int showGameMode()
 	SDL_Event event;
 	while (true)
 	{
+		frameStart = SDL_GetTicks();
 		SDL_RenderClear(renderer);
 		for (int i = 0; i < numOfGameMode; ++i)
 			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * 60);
@@ -147,5 +152,8 @@ int showGameMode()
 			}
 		}
 		SDL_RenderPresent(renderer);
+		frameTime = SDL_GetTicks() - frameStart;
+		if (frameDelay > frameTime)
+			SDL_Delay(frameDelay - frameTime);
 	}
 }

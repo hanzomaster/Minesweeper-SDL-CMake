@@ -1,5 +1,9 @@
 #include "Variables.hpp"
 
+// Giới hạn fps
+Uint32 frameStart;
+unsigned int frameTime;
+
 // Kích cỡ một ô mìn
 extern const int CELL_SIZE;
 extern const int BUTTON_SPRITE_TOTAL;

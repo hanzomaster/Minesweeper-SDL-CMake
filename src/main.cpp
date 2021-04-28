@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
 					Clock timer;
 					while (!gameOver && !quitGame && !isWinning)
 					{
+						frameStart = SDL_GetTicks();
 						SDL_RenderClear(renderer);
 
 						// Xử lí các thao tác người dùng
@@ -112,6 +113,10 @@ int main(int argc, char *argv[])
 						flagManager();
 
 						SDL_RenderPresent(renderer);
+
+						frameTime = SDL_GetTicks() - frameStart;
+						if (frameDelay > frameTime)
+							SDL_Delay(frameDelay - frameTime);
 					}
 					playAgain(quitGame, quit);
 				}
