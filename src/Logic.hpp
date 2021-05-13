@@ -1,9 +1,9 @@
 #pragma once
 #include <SDL.h>
-#include <vector>
+
 #include <utility>
-class Button
-{
+#include <vector>
+class Button {
 public:
 	void reveal(int i, int j);
 

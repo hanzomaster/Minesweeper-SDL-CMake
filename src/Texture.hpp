@@ -22,7 +22,6 @@ public:
 	int getWidth();
 	int getHeight();
 	SDL_Rect getRect() const;
-	SDL_Texture *getTexture();
 
 private:
 	SDL_Texture *mTexture;

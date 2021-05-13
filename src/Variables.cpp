@@ -1,6 +1,8 @@
 #include "Variables.hpp"
 
 // Giới hạn fps
+extern const int FPS;
+extern const int frameDelay;
 Uint32 frameStart;
 unsigned int frameTime;
 

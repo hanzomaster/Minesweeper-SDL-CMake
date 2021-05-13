@@ -256,11 +256,6 @@ bool loadMedia()
 			spriteClips[i].w = CELL_SIZE;
 			spriteClips[i].h = CELL_SIZE;
 		}
-	if (!gameSound.loadFromFile(sound_onImgPath.c_str()))
-	{
-		std::cout << "Khong the load hinh anh cua am thanh" << std::endl;
-		success = false;
-	}
 
 	// Tạo icon cho window
 	SDL_Surface *icon = IMG_Load(iconImgPath.c_str());
@@ -273,12 +268,15 @@ void resizeBoard(int rowSize, int columnSize)
 	board.resize(rowSize + 2, std::vector<int>());
 	for (int i = 0; i < rowSize + 2; ++i)
 		board[i].resize(columnSize + 2, BLANK);
+
 	sBoard.resize(rowSize + 2, std::vector<int>());
 	for (int i = 0; i < rowSize + 2; ++i)
 		sBoard[i].resize(columnSize + 2, COVER);
+
 	gButtons.resize(rowSize + 2, std::vector<Button>());
 	for (int i = 0; i < rowSize + 2; ++i)
 		gButtons[i].resize(columnSize + 2);
+
 	countMineLeft = numOfMine;
 	DISTANCE_BETWEEN = (screenWidth - (rowSize + 2) * CELL_SIZE) / 2;
 	SDL_SetWindowSize(window, screenWidth, screenHeight);
