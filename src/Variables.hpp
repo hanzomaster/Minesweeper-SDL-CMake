@@ -58,6 +58,7 @@ extern int columnSize;
 extern int countMineLeft;
 extern bool gameOver;
 extern bool isWinning;
+extern bool isFirstClick;
 extern std::stringstream mineLeft;
 
 enum title

@@ -52,6 +52,7 @@ int columnSize = 9;
 int countMineLeft;
 bool gameOver = false;
 bool isWinning = false;
+bool isFirstClick = true;
 std::stringstream mineLeft;
 
 // Vị trí sân mìn

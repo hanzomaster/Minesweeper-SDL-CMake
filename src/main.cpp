@@ -290,6 +290,8 @@ void resizeBoard(int rowSize, int columnSize)
 
 void createTableWithMine()
 {
+	// Reset first click protection
+	isFirstClick = true;
 	// Tạo sự ngẫu nhiên cho game qua mỗi lần chơi
 	srand(time(0));
 	int mine = 0;
