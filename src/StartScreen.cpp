@@ -40,6 +40,7 @@ int showMenu()
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return Exit;
+				break;
 			case SDL_MOUSEMOTION:
 			{
 				posx = event.motion.x;
@@ -113,6 +114,7 @@ int showGameMode()
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return Back;
+				break;
 			case SDL_MOUSEMOTION:
 			{
 				posx = event.motion.x;
