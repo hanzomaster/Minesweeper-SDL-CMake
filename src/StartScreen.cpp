@@ -17,7 +17,7 @@ int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValu
 	int posx = 0, posy = 0;
 
 	for (int i = 0; i < numItems; ++i)
-		textMenu[i].loadFromRenderedText(labels[i].c_str(), {0, 0, 0});
+		textMenu[i].loadFromRenderedText(labels[i].c_str(), COLOR_BLACK);
 
 	SDL_Event event;
 	while (true)
@@ -25,7 +25,7 @@ int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValu
 		frameStart = SDL_GetTicks();
 		SDL_RenderClear(renderer);
 		for (int i = 0; i < numItems; ++i)
-			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * 60);
+			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * MENU_ITEM_SPACING);
 		while (SDL_PollEvent(&event) != 0)
 		{
 			switch (event.type)
@@ -46,7 +46,7 @@ int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValu
 						if (!selected[i])
 						{
 							selected[i] = true;
-							textMenu[i].loadFromRenderedText(labels[i].c_str(), {255, 0, 0});
+							textMenu[i].loadFromRenderedText(labels[i].c_str(), COLOR_RED);
 						}
 					}
 					else
@@ -54,7 +54,7 @@ int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValu
 						if (selected[i])
 						{
 							selected[i] = false;
-							textMenu[i].loadFromRenderedText(labels[i].c_str(), {0, 0, 0});
+							textMenu[i].loadFromRenderedText(labels[i].c_str(), COLOR_BLACK);
 						}
 					}
 			}
@@ -84,8 +84,8 @@ int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValu
 
 int showMenu()
 {
-	screenWidth = 500;
-	screenHeight = 500;
+	screenWidth = MENU_SCREEN_WIDTH;
+	screenHeight = MENU_SCREEN_HEIGHT;
 	SDL_SetWindowSize(window, screenWidth, screenHeight);
 	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 

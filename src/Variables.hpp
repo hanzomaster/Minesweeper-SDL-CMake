@@ -6,15 +6,51 @@
 #include <vector>
 #include "Texture.hpp"
 #include "Logic.hpp"
-// Giới hạn fps
+
+// Frame rate limiting
 const int FPS = 24;
 const int frameDelay = 1000 / FPS;
 extern Uint32 frameStart;
 extern unsigned int frameTime;
 
-// Kích cỡ một ô mìn
+// Cell and sprite constants
 const int CELL_SIZE = 32;
 const int BUTTON_SPRITE_TOTAL = 13;
+
+// Screen dimensions
+const int MENU_SCREEN_WIDTH = 500;
+const int MENU_SCREEN_HEIGHT = 500;
+const int EASY_SCREEN_WIDTH = 500;
+const int EASY_SCREEN_HEIGHT = 500;
+const int MEDIUM_SCREEN_WIDTH = 800;
+const int MEDIUM_SCREEN_HEIGHT = 800;
+const int HARD_SCREEN_WIDTH = 1024;
+const int HARD_SCREEN_HEIGHT = 576;
+
+// Difficulty settings
+const int EASY_ROWS = 9;
+const int EASY_COLS = 9;
+const int EASY_MINES = 10;
+const int MEDIUM_ROWS = 16;
+const int MEDIUM_COLS = 16;
+const int MEDIUM_MINES = 40;
+const int HARD_ROWS = 16;
+const int HARD_COLS = 30;
+const int HARD_MINES = 99;
+
+// UI layout constants
+const int MENU_ITEM_SPACING = 60;
+const int TEXT_Y_OFFSET = 30;
+const int FONT_SIZE = 40;
+
+// Common colors
+const SDL_Color COLOR_BLACK = {0, 0, 0, 255};
+const SDL_Color COLOR_RED = {255, 0, 0, 255};
+const SDL_Color COLOR_GRAY = {140, 140, 140, 255};
+const SDL_Color COLOR_DARK_GRAY = {100, 100, 100, 255};
+const SDL_Color COLOR_TEAL = {30, 100, 100, 255};
+const SDL_Color COLOR_GOLD = {255, 215, 0, 255};
+const SDL_Color COLOR_BACKGROUND = {204, 204, 204, 255};
 
 // Biến window và kích cỡ
 extern SDL_Window *window;

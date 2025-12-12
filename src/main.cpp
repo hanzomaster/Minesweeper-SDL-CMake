@@ -46,33 +46,35 @@ int main(int argc, char *argv[])
 				{
 					quitGame = false;
 					currentDifficulty = Easy;
-					numOfMine = 10;
-					rowSize = 9;
-					columnSize = 9;
+					screenWidth = EASY_SCREEN_WIDTH;
+					screenHeight = EASY_SCREEN_HEIGHT;
+					numOfMine = EASY_MINES;
+					rowSize = EASY_ROWS;
+					columnSize = EASY_COLS;
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
 				case Medium:
 				{
-					screenWidth = 800;
-					screenHeight = 800;
 					quitGame = false;
 					currentDifficulty = Medium;
-					numOfMine = 40;
-					rowSize = 16;
-					columnSize = 16;
+					screenWidth = MEDIUM_SCREEN_WIDTH;
+					screenHeight = MEDIUM_SCREEN_HEIGHT;
+					numOfMine = MEDIUM_MINES;
+					rowSize = MEDIUM_ROWS;
+					columnSize = MEDIUM_COLS;
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
 				case Hard:
 				{
-					screenWidth = 1024;
-					screenHeight = 576;
 					quitGame = false;
 					currentDifficulty = Hard;
-					numOfMine = 99;
-					rowSize = 16;
-					columnSize = 30;
+					screenWidth = HARD_SCREEN_WIDTH;
+					screenHeight = HARD_SCREEN_HEIGHT;
+					numOfMine = HARD_MINES;
+					rowSize = HARD_ROWS;
+					columnSize = HARD_COLS;
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
