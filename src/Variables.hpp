@@ -8,42 +8,42 @@
 #include "Logic.hpp"
 
 // Frame rate limiting
-const int FPS = 24;
-const int frameDelay = 1000 / FPS;
+constexpr int FPS = 24;
+constexpr int frameDelay = 1000 / FPS;
 extern Uint32 frameStart;
 extern unsigned int frameTime;
 
 // Cell and sprite constants
-const int CELL_SIZE = 32;
-const int BUTTON_SPRITE_TOTAL = 13;
+constexpr int CELL_SIZE = 32;
+constexpr int BUTTON_SPRITE_TOTAL = 13;
 
 // Screen dimensions
-const int MENU_SCREEN_WIDTH = 500;
-const int MENU_SCREEN_HEIGHT = 500;
-const int EASY_SCREEN_WIDTH = 500;
-const int EASY_SCREEN_HEIGHT = 500;
-const int MEDIUM_SCREEN_WIDTH = 800;
-const int MEDIUM_SCREEN_HEIGHT = 800;
-const int HARD_SCREEN_WIDTH = 1024;
-const int HARD_SCREEN_HEIGHT = 576;
+constexpr int MENU_SCREEN_WIDTH = 500;
+constexpr int MENU_SCREEN_HEIGHT = 500;
+constexpr int EASY_SCREEN_WIDTH = 500;
+constexpr int EASY_SCREEN_HEIGHT = 500;
+constexpr int MEDIUM_SCREEN_WIDTH = 800;
+constexpr int MEDIUM_SCREEN_HEIGHT = 800;
+constexpr int HARD_SCREEN_WIDTH = 1024;
+constexpr int HARD_SCREEN_HEIGHT = 576;
 
 // Difficulty settings
-const int EASY_ROWS = 9;
-const int EASY_COLS = 9;
-const int EASY_MINES = 10;
-const int MEDIUM_ROWS = 16;
-const int MEDIUM_COLS = 16;
-const int MEDIUM_MINES = 40;
-const int HARD_ROWS = 16;
-const int HARD_COLS = 30;
-const int HARD_MINES = 99;
+constexpr int EASY_ROWS = 9;
+constexpr int EASY_COLS = 9;
+constexpr int EASY_MINES = 10;
+constexpr int MEDIUM_ROWS = 16;
+constexpr int MEDIUM_COLS = 16;
+constexpr int MEDIUM_MINES = 40;
+constexpr int HARD_ROWS = 16;
+constexpr int HARD_COLS = 30;
+constexpr int HARD_MINES = 99;
 
 // UI layout constants
-const int MENU_ITEM_SPACING = 60;
-const int TEXT_Y_OFFSET = 30;
-const int FONT_SIZE = 40;
+constexpr int MENU_ITEM_SPACING = 60;
+constexpr int TEXT_Y_OFFSET = 30;
+constexpr int FONT_SIZE = 40;
 
-// Common colors
+// Common colors (const instead of constexpr for aggregate initialization compatibility)
 const SDL_Color COLOR_BLACK = {0, 0, 0, 255};
 const SDL_Color COLOR_RED = {255, 0, 0, 255};
 const SDL_Color COLOR_GRAY = {140, 140, 140, 255};

@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.19)
 project(SDL2 VERSION 1.0.0)
+
+# Require C++11 for constexpr and modern features
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(SDL2_PATH "SDL2")
 set(SDL2_IMAGE_PATH "SDL2")
