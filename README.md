@@ -1,27 +1,70 @@
-# Game Minesweeper
+# Minesweeper
 
-Trần Tuấn Thịnh - 20020265
+A classic Minesweeper game built with C++ and SDL2.
 
-Bài tập lớn của lớp lập trình nâng cao 2021II_INT2215_2
+## Features
 
-## Cách cài đặt game
+- **Three difficulty levels**: Easy (9x9), Medium (16x16), Hard (30x16)
+- **First-click safety**: Your first click never hits a mine
+- **Question mark flags**: Mark uncertain cells with `?`
+- **High score tracking**: Best times saved per difficulty
+- **Sound effects** with mute toggle (press M)
+- **Cross-platform**: Windows, Linux, macOS
 
-- Trước khi cài đặt cần có [Visual Studio Build Tool 2019](https://visualstudio.microsoft.com/downloads/)![Ảnh của Build Tool cần download](https://i.imgur.com/8RCTWm5.png) Build system [CMake](https://cmake.org/download/) và text editor [VSCode](https://code.visualstudio.com/download) kèm theo extension [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake) ![Ảnh của extension](https://i.imgur.com/493rLnD.png) và [CMake Tool](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) ![Ảnh của extension](https://i.imgur.com/onhYCHX.png)
-- Tải game ở [đây](https://github.com/hanzomaster/Minesweeper-SDL-CMake), nhấn vào mục Code và chọn Download Zip![Ảnh minh hoạ phần download](https://i.imgur.com/mbLOBYv.png)
-- Sau khi đã tải về và giải nén xong hãy thêm đường dẫn đến mục SDL2/lib/x64 vào PATH của máy tính
-- Tiếp theo hãy mở app CMake (cmake-gui), chọn mục Browse Code và chỉ tới đường dẫn đến file project và file build. Sau đó nhấn Configure (nếu có bất kì thông báo nào hiện lên hãy nhấn OK) và cuối cùng nhấn Generate
-- Mở file game trên VSCode và ở thanh Status Bar nó có thể sẽ trông như này ![Ví dụ vị trí nút build](https://i.imgur.com/KfCrBhu.png)Nếu VScode yêu cầu chọn kit thì hãy chọn 'Visual Studio Build Tools 2019 Release - amd64' Nếu không thấy extension CMake ở Status Bar hãy nhấn tổ hợp phím Ctrl+Shift+P và chọn CMake:Configure
-- Nếu VSCode báo thành công thì lúc này file game của chúng ta đã ở trong mục build/Debug dưới dạng đuôi .exe
+## Quick Start
 
-Video hướng dẫn tại [đây](https://youtu.be/kNo-UdmJrmU)
+### Prerequisites
+- CMake 3.19+
+- C++11 compiler
+- SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 
-## Các tính năng và luật chơi
+### Build
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
 
-- Luật chơi dò mìn truyền thống với 2 chế độ chơi:
-  - Easy (9x9 và 10 ô mìn)
-  - Medium (16x16 40 ô mìn)
-- Các quả mìn được rải ngẫu nhiên sau mỗi lần chơi
-- Click chuột trái để mở một ô, chuột phải để đặt cờ báo hiệu mìn và chuột giữa để mở các ô xung quanh khi đã đoán đúng vị trí mìn
-- Khi bạn thắng hoặc thua, hãy nhấn nút 's' trên bàn phím để chơi lại chế độ đã chọn hoặc nút 'esc' để thoát về menu
+See [docs/BUILDING.md](docs/BUILDING.md) for detailed platform-specific instructions.
 
-###### tags: `Minesweeper` `C++` `SDL2`
+## How to Play
+
+| Action | Control |
+|--------|---------|
+| Open cell | Left click |
+| Flag/Question | Right click (cycles) |
+| Chord | Middle click |
+| Restart | S (after game ends) |
+| Menu | ESC (after game ends) |
+| Mute | M |
+
+See [docs/GAMEPLAY.md](docs/GAMEPLAY.md) for full gameplay guide.
+
+## Documentation
+
+- [Building](docs/BUILDING.md) - Build instructions for all platforms
+- [Gameplay](docs/GAMEPLAY.md) - Controls and game mechanics
+- [Architecture](docs/ARCHITECTURE.md) - Code structure for developers
+- [Contributing](docs/CONTRIBUTING.md) - How to contribute
+- [Changelog](docs/CHANGELOG.md) - Version history
+
+## Screenshots
+
+The game features a clean, classic Minesweeper interface with:
+- Numbered cells indicating adjacent mines
+- Flag and question mark markers
+- Timer and mine counter
+- Win/lose screens with high score display
+
+## Credits
+
+**Original Author**: Tran Tuan Thinh (20020265)
+Advanced Programming Course Project (2021II_INT2215_2)
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details.
+
+---
+
+###### tags: `Minesweeper` `C++` `SDL2` `CMake`
