@@ -47,7 +47,7 @@ void relocateMine(int clickI, int clickJ)
 
 void Button::reveal(int i, int j)
 {
-	if (sBoard[i][j] == COVER || sBoard[i][j] == FLAG)
+	if (sBoard[i][j] == COVER || sBoard[i][j] == FLAG || sBoard[i][j] == QUESTION)
 	{
 		if (sBoard[i][j] == FLAG)
 			countMineLeft++;
@@ -93,7 +93,7 @@ void Button::revealSurrounding(int i, int j)
 {
 	for (int k = i - 1; k <= i + 1; ++k)
 		for (int l = j - 1; l <= j + 1; ++l)
-			if (sBoard[k][l] != FLAG)
+			if (sBoard[k][l] != FLAG && sBoard[k][l] != QUESTION)
 				reveal(k, l);
 }
 
@@ -160,8 +160,12 @@ void Button::handleEvents(SDL_Event *event)
 				{
 					if (!isMute)
 						Mix_PlayChannel(-1, unFlag, 0);
-					sBoard[i][j] = COVER;
+					sBoard[i][j] = QUESTION;
 					countMineLeft++;
+				}
+				else if (sBoard[i][j] == QUESTION)
+				{
+					sBoard[i][j] = COVER;
 				}
 				break;
 			}

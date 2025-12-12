@@ -14,7 +14,7 @@ extern unsigned int frameTime;
 
 // Kích cỡ một ô mìn
 const int CELL_SIZE = 32;
-const int BUTTON_SPRITE_TOTAL = 12;
+const int BUTTON_SPRITE_TOTAL = 13;
 
 // Biến window và kích cỡ
 extern SDL_Window *window;
@@ -66,7 +66,8 @@ enum title
 	BLANK,
 	MINE = 9,
 	COVER,
-	FLAG
+	FLAG,
+	QUESTION
 };
 
 enum gameModeSelect

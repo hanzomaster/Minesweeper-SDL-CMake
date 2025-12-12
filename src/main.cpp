@@ -343,10 +343,10 @@ void createTableWithMine()
 bool checkWinning()
 {
 	// Win condition: all non-mine cells are revealed
-	// (mines can be flagged or still covered - doesn't matter)
+	// (mines can be flagged, covered, or have question marks - doesn't matter)
 	for (int i = 1; i <= rowSize; ++i)
 		for (int j = 1; j <= columnSize; ++j)
-			if (board[i][j] != MINE && (sBoard[i][j] == COVER || sBoard[i][j] == FLAG))
+			if (board[i][j] != MINE && (sBoard[i][j] == COVER || sBoard[i][j] == FLAG || sBoard[i][j] == QUESTION))
 				return false;
 	return true;
 }
