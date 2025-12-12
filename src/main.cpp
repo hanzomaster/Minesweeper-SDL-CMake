@@ -106,6 +106,10 @@ int main(int argc, char *argv[])
 								for (int i = 0; i < rowSize + 2; ++i)
 									fill(sBoard[i].begin(), sBoard[i].end(), COVER);
 							}
+							else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
+							{
+								isMute = !isMute;
+							}
 							for (int i = 1; i <= rowSize; ++i)
 								for (int j = 1; j <= columnSize; ++j)
 									gButtons[i][j].handleEvents(&event);
@@ -381,7 +385,8 @@ void flagManager()
 
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 
-		Mix_PlayMusic(winning, 0);
+		if (!isMute)
+			Mix_PlayMusic(winning, 0);
 	}
 	if (gameOver)
 	{
@@ -399,7 +404,8 @@ void flagManager()
 
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 
-		Mix_PlayChannel(-1, mineFounded, 0);
+		if (!isMute)
+			Mix_PlayChannel(-1, mineFounded, 0);
 	}
 }
 

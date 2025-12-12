@@ -73,7 +73,8 @@ int showMenu()
 					{
 						for (int j = 0; j < menuItem; ++j)
 							textMenu[i].free();
-						Mix_PlayChannel(-1, menuClick, 0);
+						if (!isMute)
+							Mix_PlayChannel(-1, menuClick, 0);
 						return i;
 					}
 			}
@@ -148,7 +149,8 @@ int showGameMode()
 					{
 						for (int j = 0; j < numOfGameMode; ++j)
 							textMenu[i].free();
-						Mix_PlayChannel(-1, menuClick, 0);
+						if (!isMute)
+							Mix_PlayChannel(-1, menuClick, 0);
 						return i;
 					}
 			}

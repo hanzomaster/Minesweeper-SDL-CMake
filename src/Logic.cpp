@@ -140,7 +140,7 @@ void Button::handleEvents(SDL_Event *event)
 							relocateMine(i, j);
 					}
 					reveal(i, j);
-					if (board[i][j] != MINE)
+					if (board[i][j] != MINE && !isMute)
 						Mix_PlayChannel(-1, openCell, 0);
 				}
 				break;
@@ -151,13 +151,15 @@ void Button::handleEvents(SDL_Event *event)
 				{
 					if (countMineLeft == 0)
 						break;
-					Mix_PlayChannel(-1, flag, 0);
+					if (!isMute)
+						Mix_PlayChannel(-1, flag, 0);
 					sBoard[i][j] = FLAG;
 					countMineLeft--;
 				}
 				else if (sBoard[i][j] == FLAG)
 				{
-					Mix_PlayChannel(-1, unFlag, 0);
+					if (!isMute)
+						Mix_PlayChannel(-1, unFlag, 0);
 					sBoard[i][j] = COVER;
 					countMineLeft++;
 				}
@@ -168,7 +170,8 @@ void Button::handleEvents(SDL_Event *event)
 				if (sBoard[i][j] < MINE && correctFlag(i, j))
 				{
 					revealSurrounding(i, j);
-					Mix_PlayChannel(-1, openCell, 0);
+					if (!isMute)
+						Mix_PlayChannel(-1, openCell, 0);
 				}
 				break;
 			}
