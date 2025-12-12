@@ -12,4 +12,14 @@ public:
 	Clock();
 	~Clock();
 	void showTime();
+	int getTime() const { return timer; }
 };
+
+// High score functions
+void loadHighScores();
+void saveHighScores();
+bool checkAndUpdateHighScore(int difficulty, int time);
+int getHighScore(int difficulty);
+
+// High score storage (indexed by difficulty: 0=Easy, 1=Medium, 2=Hard)
+extern int highScores[3];
