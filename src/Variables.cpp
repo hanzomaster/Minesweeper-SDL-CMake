@@ -39,7 +39,7 @@ Mix_Chunk *unFlag;
 Mix_Chunk *mineFounded;
 Mix_Music *winning;
 Texture gameSound;
-bool isMute;
+bool isMute = false;
 
 // Tổng số mìn
 int numOfMine;
@@ -52,6 +52,7 @@ int columnSize = 9;
 int countMineLeft;
 bool gameOver = false;
 bool isWinning = false;
+bool isFirstClick = true;
 std::stringstream mineLeft;
 
 // Vị trí sân mìn

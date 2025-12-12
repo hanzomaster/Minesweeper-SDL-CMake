@@ -1,0 +1,58 @@
+# Clang-format configuration for Minesweeper project
+# Based on existing code style
+
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: ForIndentation
+IndentCaseLabels: false
+IndentCaseBlocks: false
+NamespaceIndentation: None
+AccessModifierOffset: -4
+
+# Braces
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  BeforeCatch: true
+  BeforeElse: true
+
+# Line breaks and alignment
+ColumnLimit: 120
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AlwaysBreakAfterReturnType: None
+BreakBeforeBinaryOperators: None
+
+# Spacing
+SpaceAfterCStyleCast: false
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# Pointer and reference alignment
+PointerAlignment: Right
+ReferenceAlignment: Right
+DerivePointerAlignment: false
+
+# Include sorting
+SortIncludes: false
+IncludeBlocks: Preserve
+
+# Other
+FixNamespaceComments: true
+MaxEmptyLinesToKeep: 2
+KeepEmptyLinesAtTheStartOfBlocks: false

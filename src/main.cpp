@@ -16,9 +16,12 @@ void resizeBoard(int rowSize, int columnSize);
 void createTableWithMine();
 bool checkWinning();
 void mineManager();
-void flagManager();
+void flagManager(int finalTime, int difficulty, bool isNewRecord);
 void playAgain(bool &quitGame, bool &quit);
 void close();
+
+// Track current difficulty for high scores
+int currentDifficulty = 0;
 int main(int argc, char *argv[])
 {
 	if (!init())
@@ -27,6 +30,7 @@ int main(int argc, char *argv[])
 		std::cout << "Khoi tao phong chu that bai..." << std::endl;
 	else
 	{
+		loadHighScores();
 		bool quit = false, quitGame = false;
 		while (!quit)
 		{
@@ -41,20 +45,36 @@ int main(int argc, char *argv[])
 				case Easy:
 				{
 					quitGame = false;
-					numOfMine = 10;
-					rowSize = 9;
-					columnSize = 9;
+					currentDifficulty = Easy;
+					screenWidth = EASY_SCREEN_WIDTH;
+					screenHeight = EASY_SCREEN_HEIGHT;
+					numOfMine = EASY_MINES;
+					rowSize = EASY_ROWS;
+					columnSize = EASY_COLS;
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
 				case Medium:
 				{
-					screenWidth = 800;
-					screenHeight = 800;
 					quitGame = false;
-					numOfMine = 40;
-					rowSize = 16;
-					columnSize = 16;
+					currentDifficulty = Medium;
+					screenWidth = MEDIUM_SCREEN_WIDTH;
+					screenHeight = MEDIUM_SCREEN_HEIGHT;
+					numOfMine = MEDIUM_MINES;
+					rowSize = MEDIUM_ROWS;
+					columnSize = MEDIUM_COLS;
+					resizeBoard(rowSize, columnSize);
+					break;
+				}
+				case Hard:
+				{
+					quitGame = false;
+					currentDifficulty = Hard;
+					screenWidth = HARD_SCREEN_WIDTH;
+					screenHeight = HARD_SCREEN_HEIGHT;
+					numOfMine = HARD_MINES;
+					rowSize = HARD_ROWS;
+					columnSize = HARD_COLS;
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
@@ -74,6 +94,8 @@ int main(int argc, char *argv[])
 				while (!quitGame)
 				{
 					Clock timer;
+					int finalTime = 0;
+					bool isNewRecord = false;
 					while (!gameOver && !quitGame && !isWinning)
 					{
 						frameStart = SDL_GetTicks();
@@ -95,10 +117,19 @@ int main(int argc, char *argv[])
 								for (int i = 0; i < rowSize + 2; ++i)
 									fill(sBoard[i].begin(), sBoard[i].end(), COVER);
 							}
+							else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
+							{
+								isMute = !isMute;
+							}
 							for (int i = 1; i <= rowSize; ++i)
 								for (int j = 1; j <= columnSize; ++j)
 									gButtons[i][j].handleEvents(&event);
 							isWinning = checkWinning();
+							if (isWinning)
+							{
+								finalTime = timer.getTime();
+								isNewRecord = checkAndUpdateHighScore(currentDifficulty, finalTime);
+							}
 						}
 
 						// Vẽ sân mìn
@@ -110,7 +141,7 @@ int main(int argc, char *argv[])
 
 						mineManager();
 
-						flagManager();
+						flagManager(finalTime, currentDifficulty, isNewRecord);
 
 						SDL_RenderPresent(renderer);
 
@@ -290,6 +321,8 @@ void resizeBoard(int rowSize, int columnSize)
 
 void createTableWithMine()
 {
+	// Reset first click protection
+	isFirstClick = true;
 	// Tạo sự ngẫu nhiên cho game qua mỗi lần chơi
 	srand(time(0));
 	int mine = 0;
@@ -325,15 +358,13 @@ void createTableWithMine()
 
 bool checkWinning()
 {
-	bool win = false;
+	// Win condition: all non-mine cells are revealed
+	// (mines can be flagged, covered, or have question marks - doesn't matter)
 	for (int i = 1; i <= rowSize; ++i)
 		for (int j = 1; j <= columnSize; ++j)
-			if (board[i][j] == MINE)
-				if (sBoard[i][j] == FLAG)
-					win = true;
-				else
-					return false;
-	return win;
+			if (board[i][j] != MINE && (sBoard[i][j] == COVER || sBoard[i][j] == FLAG || sBoard[i][j] == QUESTION))
+				return false;
+	return true;
 }
 
 void mineManager()
@@ -352,8 +383,12 @@ void mineManager()
 	}
 }
 
-void flagManager()
+void flagManager(int finalTime, int difficulty, bool isNewRecord)
 {
+	static Texture gTimeTexture;
+	static Texture gBestTimeTexture;
+	static Texture gNewRecordTexture;
+
 	if (isWinning)
 	{
 		// In ra vị trí mìn
@@ -368,9 +403,29 @@ void flagManager()
 		// Tạo màn hình thắng
 		gWin.render((screenWidth - gWin.getWidth()) / 2, 30);
 
+		// Display time and best time
+		std::string timeStr = "Time: " + std::to_string(finalTime) + "s";
+		gTimeTexture.loadFromRenderedText(timeStr.c_str(), {100, 100, 100});
+		gTimeTexture.render((screenWidth - gTimeTexture.getWidth()) / 2, 80);
+
+		int bestTime = getHighScore(difficulty);
+		if (bestTime > 0)
+		{
+			std::string bestStr = "Best: " + std::to_string(bestTime) + "s";
+			gBestTimeTexture.loadFromRenderedText(bestStr.c_str(), {100, 100, 100});
+			gBestTimeTexture.render((screenWidth - gBestTimeTexture.getWidth()) / 2, 120);
+		}
+
+		if (isNewRecord)
+		{
+			gNewRecordTexture.loadFromRenderedText("NEW RECORD!", {255, 215, 0});
+			gNewRecordTexture.render((screenWidth - gNewRecordTexture.getWidth()) / 2, 160);
+		}
+
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 
-		Mix_PlayMusic(winning, 0);
+		if (!isMute)
+			Mix_PlayMusic(winning, 0);
 	}
 	if (gameOver)
 	{
@@ -388,7 +443,8 @@ void flagManager()
 
 		gPlayAgainTexture.render((screenWidth - gPlayAgainTexture.getWidth()) / 2, screenHeight - gPlayAgainTexture.getHeight());
 
-		Mix_PlayChannel(-1, mineFounded, 0);
+		if (!isMute)
+			Mix_PlayChannel(-1, mineFounded, 0);
 	}
 }
 

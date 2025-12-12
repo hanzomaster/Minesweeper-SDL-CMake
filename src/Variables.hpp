@@ -6,15 +6,51 @@
 #include <vector>
 #include "Texture.hpp"
 #include "Logic.hpp"
-// Giới hạn fps
-const int FPS = 24;
-const int frameDelay = 1000 / FPS;
+
+// Frame rate limiting
+constexpr int FPS = 24;
+constexpr int frameDelay = 1000 / FPS;
 extern Uint32 frameStart;
 extern unsigned int frameTime;
 
-// Kích cỡ một ô mìn
-const int CELL_SIZE = 32;
-const int BUTTON_SPRITE_TOTAL = 12;
+// Cell and sprite constants
+constexpr int CELL_SIZE = 32;
+constexpr int BUTTON_SPRITE_TOTAL = 13;
+
+// Screen dimensions
+constexpr int MENU_SCREEN_WIDTH = 500;
+constexpr int MENU_SCREEN_HEIGHT = 500;
+constexpr int EASY_SCREEN_WIDTH = 500;
+constexpr int EASY_SCREEN_HEIGHT = 500;
+constexpr int MEDIUM_SCREEN_WIDTH = 800;
+constexpr int MEDIUM_SCREEN_HEIGHT = 800;
+constexpr int HARD_SCREEN_WIDTH = 1024;
+constexpr int HARD_SCREEN_HEIGHT = 576;
+
+// Difficulty settings
+constexpr int EASY_ROWS = 9;
+constexpr int EASY_COLS = 9;
+constexpr int EASY_MINES = 10;
+constexpr int MEDIUM_ROWS = 16;
+constexpr int MEDIUM_COLS = 16;
+constexpr int MEDIUM_MINES = 40;
+constexpr int HARD_ROWS = 16;
+constexpr int HARD_COLS = 30;
+constexpr int HARD_MINES = 99;
+
+// UI layout constants
+constexpr int MENU_ITEM_SPACING = 60;
+constexpr int TEXT_Y_OFFSET = 30;
+constexpr int FONT_SIZE = 40;
+
+// Common colors (const instead of constexpr for aggregate initialization compatibility)
+const SDL_Color COLOR_BLACK = {0, 0, 0, 255};
+const SDL_Color COLOR_RED = {255, 0, 0, 255};
+const SDL_Color COLOR_GRAY = {140, 140, 140, 255};
+const SDL_Color COLOR_DARK_GRAY = {100, 100, 100, 255};
+const SDL_Color COLOR_TEAL = {30, 100, 100, 255};
+const SDL_Color COLOR_GOLD = {255, 215, 0, 255};
+const SDL_Color COLOR_BACKGROUND = {204, 204, 204, 255};
 
 // Biến window và kích cỡ
 extern SDL_Window *window;
@@ -58,6 +94,7 @@ extern int columnSize;
 extern int countMineLeft;
 extern bool gameOver;
 extern bool isWinning;
+extern bool isFirstClick;
 extern std::stringstream mineLeft;
 
 enum title
@@ -65,13 +102,15 @@ enum title
 	BLANK,
 	MINE = 9,
 	COVER,
-	FLAG
+	FLAG,
+	QUESTION
 };
 
 enum gameModeSelect
 {
 	Easy,
-	Medium
+	Medium,
+	Hard
 };
 
 enum menuSelect
