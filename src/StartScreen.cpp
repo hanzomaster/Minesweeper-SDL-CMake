@@ -8,58 +8,53 @@ bool checkFocusWithRect(const int &x, const int &y, const SDL_Rect &rect)
 	return false;
 }
 
-int showMenu()
+// Generic menu display function to reduce code duplication
+int showGenericMenu(const std::vector<std::string> &labels, int escapeReturnValue, int quitReturnValue)
 {
-	screenWidth = 500;
-	screenHeight = 500;
-	SDL_SetWindowSize(window, screenWidth, screenHeight);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-	static const int menuItem = 2;
-	Texture textMenu[menuItem];
-	bool selected[menuItem] = {false, false};
-	const char *labels[menuItem] = {"New Game",
-									"Exit"};
+	const int numItems = labels.size();
+	std::vector<Texture> textMenu(numItems);
+	std::vector<bool> selected(numItems, false);
 	int posx = 0, posy = 0;
 
-	for (int i = 0; i < menuItem; ++i)
-		textMenu[i].loadFromRenderedText(labels[i], {0, 0, 0});
+	for (int i = 0; i < numItems; ++i)
+		textMenu[i].loadFromRenderedText(labels[i].c_str(), {0, 0, 0});
 
 	SDL_Event event;
 	while (true)
 	{
 		frameStart = SDL_GetTicks();
 		SDL_RenderClear(renderer);
-		for (int i = 0; i < menuItem; ++i)
+		for (int i = 0; i < numItems; ++i)
 			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * 60);
 		while (SDL_PollEvent(&event) != 0)
 		{
 			switch (event.type)
 			{
 			case SDL_QUIT:
-				return Exit;
+				return quitReturnValue;
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return Exit;
+					return escapeReturnValue;
 				break;
 			case SDL_MOUSEMOTION:
 			{
 				posx = event.motion.x;
 				posy = event.motion.y;
-				for (int i = 0; i < menuItem; ++i)
+				for (int i = 0; i < numItems; ++i)
 					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
 					{
-						if (selected[i] == false)
+						if (!selected[i])
 						{
 							selected[i] = true;
-							textMenu[i].loadFromRenderedText(labels[i], {255, 0, 0});
+							textMenu[i].loadFromRenderedText(labels[i].c_str(), {255, 0, 0});
 						}
 					}
 					else
 					{
-						if (selected[i] == true)
+						if (selected[i])
 						{
 							selected[i] = false;
-							textMenu[i].loadFromRenderedText(labels[i], {0, 0, 0});
+							textMenu[i].loadFromRenderedText(labels[i].c_str(), {0, 0, 0});
 						}
 					}
 			}
@@ -68,11 +63,11 @@ int showMenu()
 			{
 				posx = event.button.x;
 				posy = event.button.y;
-				for (int i = 0; i < menuItem; ++i)
+				for (int i = 0; i < numItems; ++i)
 					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
 					{
-						for (int j = 0; j < menuItem; ++j)
-							textMenu[i].free();
+						for (int j = 0; j < numItems; ++j)
+							textMenu[j].free();
 						if (!isMute)
 							Mix_PlayChannel(-1, menuClick, 0);
 						return i;
@@ -87,78 +82,23 @@ int showMenu()
 	}
 }
 
+int showMenu()
+{
+	screenWidth = 500;
+	screenHeight = 500;
+	SDL_SetWindowSize(window, screenWidth, screenHeight);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+	std::vector<std::string> labels = {"New Game", "Exit"};
+	return showGenericMenu(labels, Exit, Exit);
+}
+
 int showGameMode()
 {
-	static const int numOfGameMode = 3;
-	Texture textMenu[numOfGameMode];
-	bool selected[numOfGameMode] = {false, false, false};
-	const char *labels[numOfGameMode] = {"Easy (9x9 10 mines)",
-										 "Medium (16x16 40 mines)",
-										 "Hard (30x16 99 mines)"};
-	int posx = 0, posy = 0;
-
-	for (int i = 0; i < numOfGameMode; ++i)
-		textMenu[i].loadFromRenderedText(labels[i], {0, 0, 0});
-
-	SDL_Event event;
-	while (true)
-	{
-		frameStart = SDL_GetTicks();
-		SDL_RenderClear(renderer);
-		for (int i = 0; i < numOfGameMode; ++i)
-			textMenu[i].render((screenWidth - textMenu[i].getWidth()) / 2, (screenHeight - textMenu[i].getHeight()) * 1 / 3 + i * 60);
-		while (SDL_PollEvent(&event) != 0)
-		{
-			switch (event.type)
-			{
-			case SDL_QUIT:
-				return Quit;
-			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return Back;
-				break;
-			case SDL_MOUSEMOTION:
-			{
-				posx = event.motion.x;
-				posy = event.motion.y;
-				for (int i = 0; i < numOfGameMode; ++i)
-					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
-					{
-						if (selected[i] == false)
-						{
-							selected[i] = true;
-							textMenu[i].loadFromRenderedText(labels[i], {255, 0, 0});
-						}
-					}
-					else
-					{
-						if (selected[i] == true)
-						{
-							selected[i] = false;
-							textMenu[i].loadFromRenderedText(labels[i], {0, 0, 0});
-						}
-					}
-			}
-			break;
-			case SDL_MOUSEBUTTONDOWN:
-			{
-				posx = event.button.x;
-				posy = event.button.y;
-				for (int i = 0; i < numOfGameMode; ++i)
-					if (checkFocusWithRect(posx, posy, textMenu[i].getRect()))
-					{
-						for (int j = 0; j < numOfGameMode; ++j)
-							textMenu[i].free();
-						if (!isMute)
-							Mix_PlayChannel(-1, menuClick, 0);
-						return i;
-					}
-			}
-			}
-		}
-		SDL_RenderPresent(renderer);
-		frameTime = SDL_GetTicks() - frameStart;
-		if (frameDelay > frameTime)
-			SDL_Delay(frameDelay - frameTime);
-	}
+	std::vector<std::string> labels = {
+		"Easy (9x9 10 mines)",
+		"Medium (16x16 40 mines)",
+		"Hard (30x16 99 mines)"
+	};
+	return showGenericMenu(labels, Back, Quit);
 }
