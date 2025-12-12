@@ -88,11 +88,12 @@ int showMenu()
 
 int showGameMode()
 {
-	static const int numOfGameMode = 2;
+	static const int numOfGameMode = 3;
 	Texture textMenu[numOfGameMode];
-	bool selected[numOfGameMode] = {false, false};
+	bool selected[numOfGameMode] = {false, false, false};
 	const char *labels[numOfGameMode] = {"Easy (9x9 10 mines)",
-										 "Medium (16x16 40 mines)"};
+										 "Medium (16x16 40 mines)",
+										 "Hard (30x16 99 mines)"};
 	int posx = 0, posy = 0;
 
 	for (int i = 0; i < numOfGameMode; ++i)

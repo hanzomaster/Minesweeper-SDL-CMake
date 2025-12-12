@@ -58,6 +58,17 @@ int main(int argc, char *argv[])
 					resizeBoard(rowSize, columnSize);
 					break;
 				}
+				case Hard:
+				{
+					screenWidth = 1024;
+					screenHeight = 576;
+					quitGame = false;
+					numOfMine = 99;
+					rowSize = 16;
+					columnSize = 30;
+					resizeBoard(rowSize, columnSize);
+					break;
+				}
 				case Quit:
 				{
 					quitGame = true;

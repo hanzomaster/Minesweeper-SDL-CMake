@@ -72,7 +72,8 @@ enum title
 enum gameModeSelect
 {
 	Easy,
-	Medium
+	Medium,
+	Hard
 };
 
 enum menuSelect
